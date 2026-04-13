@@ -8,15 +8,22 @@ def get_financial_news(stock_id: str) -> list:
     Returns a list of headlines.
     """
     try:
-        ticker = yf.Ticker(f"{stock_id}.NS")
+        # Try with .NS suffix first (default behavior for Indian stocks)
+        symbol = f"{stock_id}.NS" if "." not in stock_id else stock_id
+        ticker = yf.Ticker(symbol)
         news = ticker.news
         headlines = [item['title'] for item in news if 'title' in item]
         
-        # Fallback to empty if no ticker specific news is found
+        # If no news found with .NS, try the exact symbol (for Global stocks like TSLA)
+        if not headlines and "." not in stock_id:
+            ticker = yf.Ticker(stock_id)
+            news = ticker.news
+            headlines = [item['title'] for item in news if 'title' in item]
+        
         if not headlines:
             return []
         
-        return headlines[:5]  # Limit to 5 headlines for sentiment analysis
+        return headlines[:5]
     except Exception as e:
         print(f"Error fetching news: {e}")
         return ["Market stays volatile amid global economic changes."]

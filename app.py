@@ -5,6 +5,7 @@ import datetime
 import os
 import joblib
 import plotly.graph_objects as go
+import plotly.express as px
 from plotly.subplots import make_subplots
 
 # Service Imports
@@ -174,6 +175,14 @@ elif page == "Market":
                 fig.update_yaxes(showgrid=True, gridcolor='rgba(255,255,255,0.05)')
 
                 st.plotly_chart(fig, use_container_width=True)
+                
+                with st.expander("📚 How to read these charts?"):
+                    st.markdown("""
+                        - **Candlestick Chart**: Shows Open, High, Low, and Close prices. Blue/Green means the price closed higher than it opened; Red means it closed lower.
+                        - **SMA 50 (Simple Moving Average)**: The average price over the last 50 periods. When the price is above the SMA 50, it's often considered a bullish trend.
+                        - **Volume**: The number of shares traded. High volume confirms the strength of a price move.
+                        - **Benchmark Comparison**: The dotted lines show how other stocks performed over the same period, allowing you to gauge relative strength.
+                    """)
             
             with stat_col:
                 st.write("### Technical Scan")
@@ -232,7 +241,10 @@ elif page == "Analyzer":
                 else:
                     model = joblib.load(model_path)
                 
-                prediction = ml_predict(model, df)
+                res_data = ml_predict(model, df)
+                prediction = res_data['label']
+                conf = res_data['confidence']
+                importances = res_data['importances']
                 
                 sentiment = {"label": "Neutral", "confidence": 0.0}
                 headlines = []
@@ -245,16 +257,17 @@ elif page == "Analyzer":
                     
                     res_c1, res_c2 = st.columns(2)
                     with res_c1:
-                        st.write("**AI Signal**")
+                        st.write("**AI Signal (Random Forest)**")
                         if "BUY" in prediction and "NO" not in prediction:
                             st.success(f"### {prediction}")
                         else:
                             st.error(f"### {prediction}")
+                        st.write(f"Model Confidence: {conf:.1%}")
                     
                     with res_c2:
-                        st.write("**NLP Pulse**")
+                        st.write("**NLP Pulse (FinBERT)**")
                         st.info(f"### {sentiment['label'].upper()}")
-                        st.write(f"Confidence: {sentiment['confidence']:.1%}")
+                        st.write(f"Sentiment Weight: {sentiment['confidence']:.1%}")
                     
                     # Signal Consensus Section
                     st.markdown("<br>", unsafe_allow_html=True)
@@ -263,14 +276,36 @@ elif page == "Analyzer":
                     consensus = get_consensus_verdict(latest_rsi, latest_macd, sentiment['label'])
                     
                     st.write("---")
-                    st.write("### Signal Consensus")
+                    st.write("### Prediction Rationale")
                     
+                    # Explain model logic
+                    exp_col1, exp_col2 = st.columns([1, 1])
+                    with exp_col1:
+                        st.write("#### Why this prediction?")
+                        st.markdown(f"""
+                            The Random Forest model analyzed 7 technical indicators. 
+                            The current **Signal Consensus** is **{consensus['verdict'].upper()}**.
+                            
+                            **Drivers:**
+                            - Technical Signal: `{consensus['tech_signal']}`
+                            - Market Sentiment: `{sentiment['label']}`
+                            - AI Confidence: `{conf:.1%}`
+                        """)
+                    
+                    with exp_col2:
+                        # Plot feature importance for this model
+                        imp_df = pd.DataFrame(list(importances.items()), columns=['Indicator', 'Impact'])
+                        imp_df = imp_df.sort_values(by='Impact', ascending=True)
+                        fig_imp = px.bar(imp_df, x='Impact', y='Indicator', orientation='h', 
+                                       title="What Drives the AI?",
+                                       color='Impact', color_continuous_scale='Viridis')
+                        fig_imp.update_layout(height=250, margin=dict(l=0, r=0, t=30, b=0), showlegend=False, coloraxis_showscale=False)
+                        st.plotly_chart(fig_imp, use_container_width=True)
+                        
                     alert_type = st.success if "Buy" in consensus['verdict'] else st.error if "Sell" in consensus['verdict'] else st.info
-                    alert_type(f"## {consensus['verdict'].upper()}")
-                    st.write(f"(Technical: {consensus['tech_signal']}, Sentiment: {sentiment['label']})")
+                    alert_type(f"## CONSENSUS: {consensus['verdict'].upper()}")
 
             except Exception as e:
-                status.update(label="Inference Failure", state="error")
                 st.error(f"Critical System Error: {e}")
 
 

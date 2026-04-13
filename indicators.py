@@ -1,4 +1,6 @@
-# indicators.py
+import streamlit as st
+
+@st.cache_data
 def calculate_indicators(df):
     df['SMA_50'] = df['Close'].rolling(window=50).mean()
     df['SMA_200'] = df['Close'].rolling(window=200).mean()

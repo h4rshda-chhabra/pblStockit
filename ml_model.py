@@ -55,7 +55,7 @@ def ml_predict(model, stock_data):
     processed_data = stock_data[FEATURES].dropna()
     
     if processed_data.empty:
-        raise ValueError("Insufficient data to calculate technical indicators. Please select a longer timeframe (e.g., 1y).")
+        raise ValueError("Insufficient data for technical indicators. Try a longer timeframe (e.g., 1y).")
 
     latest = processed_data.iloc[-1]
     latest_df = pd.DataFrame([latest.values], columns=FEATURES)
@@ -63,6 +63,28 @@ def ml_predict(model, stock_data):
     prediction = model.predict(latest_df)[0]
     confidence = model.predict_proba(latest_df)[0][prediction]
 
+    # Calculate Local feature contributions (Simplified: Importance * Sign of difference from mean)
+    # Since we don't have SHAP installed, we'll use Global Importances as a proxy for 'drivers'
+    importances = dict(zip(FEATURES, model.feature_importances_))
+    
     label = "BUY" if prediction == 1 else "NO BUY"
-    print(f"[ML] Confidence: {confidence:.2%}")
-    return label
+    
+    return {
+        "label": label,
+        "confidence": confidence,
+        "importances": importances,
+        "latest_values": latest.to_dict()
+    }
+
+def get_model_explanation(model):
+    """Returns global feature importances of the model."""
+    importances = model.feature_importances_
+    indices = np.argsort(importances)[::-1]
+    
+    explanation = []
+    for i in indices:
+        explanation.append({
+            "feature": FEATURES[i],
+            "importance": float(importances[i])
+        })
+    return explanation

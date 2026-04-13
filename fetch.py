@@ -1,7 +1,9 @@
 import yfinance as yf
 import pandas as pd
 import numpy as np
+import streamlit as st
 
+@st.cache_data(ttl=3600)  # Cache data for 1 hour
 def fetch_stock_data(stock_id, period):
     # Try with .NS suffix first if it's a simple symbol (typically Indian market)
     symbol = stock_id if "." in stock_id else f"{stock_id}.NS"

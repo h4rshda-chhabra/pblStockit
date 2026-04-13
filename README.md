@@ -3,7 +3,6 @@
 StockIt is an institutional-grade stock analysis and prediction platform. It leverages a hybrid intelligence model that combines quantitative technical indicators with natural language processing of financial news to provide high-accuracy market signals.
 
 ## Features
-
 ### Hybrid Signal Consensus
 The platform features a proprietary Signal Consensus Indicator that synthesizes multiple data points into a single actionable verdict. It evaluates:
 - Technical Strength: RSI (Relative Strength Index) and MACD (Moving Average Convergence Divergence).
@@ -21,7 +20,6 @@ The platform features a proprietary Signal Consensus Indicator that synthesizes 
 - Clean, focused interface optimized for analytical decision making.
 
 ## Technical Architecture
-
 The system is organized into a modular four-layer architecture:
 1. Data Layer: Handles API connectivity and telemetry ingestion.
 2. Analytical Layer: Performs mathematical processing and indicator generation.

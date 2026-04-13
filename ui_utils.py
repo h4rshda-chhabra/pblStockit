@@ -17,11 +17,11 @@ def apply_custom_style():
             background-size: 60px 60px;
         }
         
-        /* Hide default Streamlit elements */
-        #MainMenu {visibility: hidden;}
-        footer {visibility: hidden;}
-        header {visibility: hidden;}
-        [data-testid="stSidebar"] {display: none;}
+        /* Hide default Streamlit elements - Reduced aggressiveness for visibility */
+        #MainMenu {visibility: visible; opacity: 0.1;}
+        footer {visibility: visible; opacity: 0.1;}
+        header {visibility: visible; opacity: 0.1;}
+        [data-testid="stSidebar"] {display: block; opacity: 0.1;}
         
         /* Navbar Styling */
         .nav-container {
@@ -273,7 +273,7 @@ def render_navbar():
                 0% {{ transform: translateX(0); }}
                 100% {{ transform: translateX(-33.33%); }}
             }}
-            .layout-buffer {{ height: 85px; }}
+            .layout-buffer {{ height: 120px; }}
             
             /* Extreme Right Nav Group Hack */
             div[data-testid="stRadio"] {{

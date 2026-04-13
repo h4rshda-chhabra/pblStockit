@@ -14,6 +14,7 @@ def get_model():
     model = AutoModelForSequenceClassification.from_pretrained(MODEL_NAME)
     return tokenizer, model
 
+@st.cache_data(show_spinner=False)
 def analyze_sentiment(headlines: list) -> dict:
     """
     Performs sentiment analysis on a list of headlines using local FinBERT model.
