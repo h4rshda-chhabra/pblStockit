@@ -7,8 +7,8 @@ import joblib
 import plotly.graph_objects as go
 import plotly.express as px
 from plotly.subplots import make_subplots
-import streamlit.components.v1 as components
 
+import streamlit.components.v1 as components
 from fetch import fetch_stock_data
 from indicators import calculate_indicators
 from ml_model import ml_predict, load_or_train_model
@@ -875,17 +875,21 @@ elif page == "Sentiment":
                     
                     st.write("<br>", unsafe_allow_html=True)
                     st.markdown(f'''
-                        <div class="premium-card">
-                            <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Sentiment Verdict</p>
-                            <div style="display: flex; align-items: baseline; gap: 15px;">
-                                <h2 style="color: {s_color}; font-size: 3.5rem; margin: 15px 0;">{s_label.upper()}</h2>
-                                <p style="font-size: 1.4rem; color: rgba(255,255,255,0.5);">Score: {s_score:+.2f}</p>
+                        <div class="premium-card" style="position: relative; overflow: hidden;">
+                            <div style="position: absolute; top: -10px; right: -10px; font-size: 8rem; font-weight: 900; color: rgba(255,255,255,0.02); pointer-events: none; text-transform: uppercase;">{s_label}</div>
+                            <p style="color: rgba(255,255,255,0.4); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">Analytical Perception Verdict</p>
+                            <div style="display: flex; align-items: baseline; gap: 20px; margin: 30px 0;">
+                                <h2 style="color: {s_color}; font-size: 4.5rem; margin: 0; font-weight: 900; line-height: 1;">{s_label.upper()}</h2>
+                                <p style="font-size: 1.6rem; color: rgba(255,255,255,0.6); font-family: 'JetBrains Mono';">Score: {s_score:+.2f}</p>
                             </div>
-                            <div style="margin-top: 15px;">
-                                {"".join([f'<span class="signal-chip">{k.upper()}</span>' for k in keywords]) if keywords else '<span style="color: grey; font-size: 0.8rem;">No specific signals detected.</span>'}
+                            <div style="margin-top: 25px;">
+                                {"".join([f'<div style="display:inline-block; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); padding:6px 16px; border-radius:8px; margin-right:10px; margin-bottom:10px; font-size:0.75rem; font-weight:700; color:#00D9FF; text-transform:uppercase; letter-spacing:1px;">{k}</div>' for k in keywords]) if keywords else '<span style="color: grey; font-size: 0.8rem;">No critical linguistic signals identified.</span>'}
                             </div>
-                            <hr style="border-color: rgba(255,255,255,0.05); margin: 25px 0;">
-                            <p style="color: rgba(255,255,255,0.5); font-size: 0.85rem;">Neural Confidence: <b>{conf_level} ({sentiment['confidence']:.1%})</b></p>
+                            <hr style="border-color: rgba(255,255,255,0.05); margin: 35px 0;">
+                            <div style="display: flex; justify-content: space-between; align-items: center;">
+                                <p style="color: rgba(255,255,255,0.4); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Neural Inference Confidence</p>
+                                <span style="color: white; font-weight: 800; font-size: 1.2rem;">{conf_level.upper()} ({sentiment['confidence']:.1%})</span>
+                            </div>
                         </div>
                     ''', unsafe_allow_html=True)
             else: st.warning("Please enter text to analyze.")

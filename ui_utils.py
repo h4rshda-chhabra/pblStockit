@@ -8,18 +8,16 @@ def apply_custom_style():
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap');
 
         .main {
-            background-color: #06080a;
+            background-color: #0B0B0E;
             color: #ffffff;
             font-family: 'Inter', sans-serif;
-            background-image: 
-                linear-gradient(rgba(0, 212, 255, 0.08) 1.5px, transparent 1.5px),
-                linear-gradient(90deg, rgba(0, 212, 255, 0.08) 1.5px, transparent 1.5px);
-            background-size: 60px 60px;
+            background-image: radial-gradient(#1A1A1D 1.8px, transparent 1.8px);
+            background-size: 30px 30px;
         }
         
         .main .block-container {
-            padding-top: 2rem !important;
-            margin-top: 3vh !important;
+            padding-top: 1.5rem !important;
+            margin-top: 2vh !important;
         }
         
         /* Hide default Streamlit elements - Reduced aggressiveness for visibility */
@@ -120,29 +118,20 @@ def apply_custom_style():
             height: 40px;
         }
         
-        /* Glassmorphism Cards */
-        .glass-card {
-            background: rgba(18, 22, 28, 0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
+        /* Premium Design - Precision 24px Radius */
+        .glass-card, .premium-card {
+            background: #141417;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
             padding: 2rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 20px 60px -15px rgba(0,0,0,0.8);
         }
-        .glass-card:hover {
-            border-color: rgba(0, 212, 255, 0.4);
-            transform: translateY(-5px);
-            background: rgba(22, 28, 36, 0.85);
-            box-shadow: 0 20px 40px rgba(0, 212, 255, 0.15);
-        }
-        
-        /* Highlighted Card Style */
-        .glass-card.highlight {
-            border-color: #00d4ff !important;
-            background: linear-gradient(145deg, rgba(0, 212, 255, 0.05), rgba(0, 0, 0, 0));
+        .glass-card:hover, .premium-card:hover {
+            border-color: rgba(0, 217, 255, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 30px 80px -20px rgba(0,0,0,0.9);
         }
         
         /* Inference Step Styling (Vertical Flow) */
@@ -163,41 +152,40 @@ def apply_custom_style():
             box-shadow: 0 0 10px #00d4ff;
         }
         
-        /* Global Button Overrides */
+        /* Institutional Action Components */
         div.stButton > button[data-testid="baseButton-primary"] {
-            height: 70px !important;
-            font-size: 1.25rem !important;
+            height: 65px !important;
+            font-size: 1.1rem !important;
             font-weight: 700 !important;
-            background: linear-gradient(135deg, #00d4ff 0%, #0066ff 100%) !important;
+            background: linear-gradient(135deg, #00D9FF 0%, #0066ff 100%) !important;
             border: none !important;
             color: #ffffff !important;
-            border-radius: 12px !important;
-            box-shadow: 0 8px 25px rgba(0, 212, 255, 0.25), inset 0 2px 2px rgba(255,255,255,0.3) !important;
-            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+            border-radius: 16px !important;
+            box-shadow: 0 10px 30px rgba(0, 217, 255, 0.2), inset 0 1px 1px rgba(255,255,255,0.4) !important;
+            transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
         div.stButton > button[data-testid="baseButton-primary"]:hover {
-            transform: scale(1.04) translateY(-3px) !important;
-            box-shadow: 0 15px 35px rgba(0, 212, 255, 0.45), inset 0 2px 2px rgba(255,255,255,0.5) !important;
-            background: linear-gradient(135deg, #00e0ff 0%, #0077ff 100%) !important;
+            transform: translateY(-3px) scale(1.02) !important;
+            box-shadow: 0 15px 40px rgba(0, 217, 255, 0.4), inset 0 1px 1px rgba(255,255,255,0.5) !important;
         }
 
         div.stButton > button[data-testid="baseButton-secondary"] {
-            height: 70px !important;
-            font-size: 1.2rem !important;
+            height: 65px !important;
+            font-size: 1.1rem !important;
             font-weight: 600 !important;
-            background: rgba(255, 255, 255, 0.02) !important;
-            backdrop-filter: blur(15px) !important;
-            border: 2px solid rgba(0, 212, 255, 0.3) !important;
-            color: #00d4ff !important;
-            border-radius: 12px !important;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2) !important;
-            transition: all 0.4s ease !important;
+            background: rgba(255, 255, 255, 0.03) !important;
+            border: 1px solid rgba(0, 217, 255, 0.3) !important;
+            color: #00D9FF !important;
+            border-radius: 16px !important;
+            transition: all 0.3s ease !important;
+            text-transform: uppercase;
         }
         div.stButton > button[data-testid="baseButton-secondary"]:hover {
-            background: rgba(0, 212, 255, 0.1) !important;
-            border-color: #00d4ff !important;
-            box-shadow: 0 0 25px rgba(0, 212, 255, 0.3) !important;
-            transform: scale(1.03) translateY(-2px) !important;
+            background: rgba(0, 217, 255, 0.08) !important;
+            border-color: #00D9FF !important;
+            transform: translateY(-2px) !important;
         }
         
         /* Horizontal Navbar via Radio Group Hack */
