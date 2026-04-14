@@ -947,11 +947,6 @@ elif page == "Sentiment":
                             st.markdown(f'''<div class="premium-card" style="border-right: 4px solid {i_color};"><p style="color: rgba(255,255,255,0.5); font-size: 0.85rem; font-weight: 700; text-transform: uppercase;">AI Reasoning Insights</p><div style="margin-top: 20px;"><div class="insight-card" style="border-color: {i_color};">📈 Headline indicates <b>{news_data['label'].lower()}</b> sentiment.</div><div class="insight-card" style="border-color: #00d4ff;">⚡ Market volatility is <b>{vol_level.lower()}</b>, allowing sentiment to impact price.</div><div class="insight-card" style="border-color: #ffd700;">🧠 Model conviction is <b>{conf_level.lower()}</b> based on linguistic syntax.</div><hr style="border-color: rgba(255,255,255,0.05); margin: 20px 0;"><p style="font-style: italic; color: #00ff9d; font-weight: 600;">"Conclusion: {news_data['label']} perception combined with {vol_level.lower()} volatility suggests a short-term {summary_msg}."</p></div></div>''', unsafe_allow_html=True)
                     else: st.error("Market data fetch failed.")
             else: st.warning("Enter both Ticker and Headline.")
-.")
-
-# --- Page: Education ---
-        else:
-            st.info("Please enter intel text to analyze.")
 
 # --- Page: Education ---
 elif page == "Education":
