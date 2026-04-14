@@ -11,7 +11,7 @@ import os
 
 # Fixed feature set
 FEATURES = ['SMA_50', 'SMA_200', 'EMA_50', 'EMA_200', 'RSI', 'MACD', 'Signal_Line']
-MODEL_DIR = os.path.join(os.path.dirname(__file__), "models_v5")
+MODEL_DIR = os.path.join(os.path.dirname(__file__), "models_v6")
 
 def normalize_features_for_model(features_df, close_series):
     norm_df = features_df.copy()
@@ -105,8 +105,8 @@ def ml_predict(model, stock_data):
     prediction = model.predict(latest_df)[0]
     probs = model.predict_proba(latest_df)[0]
     
-    # Genuine Prediction Threshold (Requiring strict 50% majority probability)
-    if probs[1] > 0.50:
+    # Genuine Prediction Threshold (Requiring 55% majority probability)
+    if probs[1] >= 0.55:
         pred_idx = 1
         label = "BUY"
         confidence = probs[1]
