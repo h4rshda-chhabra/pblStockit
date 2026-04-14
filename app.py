@@ -835,7 +835,7 @@ elif page == "Analyzer":
 
 # --- Page: Sentiment ---
 elif page == "Sentiment":
-    header_section("🧠 Sentiment Intelligence", "Natural Language Processing of Financial Intel")
+    header_section("Sentiment Intelligence", "Natural Language Processing of Financial Intel")
     
     st.markdown('''
     <style>
@@ -873,23 +873,13 @@ elif page == "Sentiment":
         st.session_state.custom_news = ""
 
     with st.container():
-        st.markdown('<div class="nlp-card">', unsafe_allow_html=True)
         
-        tab_text, tab_news = st.tabs(["📄 Paste Text", "📰 Analyze News"])
+        tab_text, tab_news = st.tabs(["Paste Text", "Analyze News"])
         
         with tab_text:
             st.markdown('<p style="color: rgba(255,255,255,0.7); font-size: 1.15rem; margin-bottom: 20px;">Paste any financial news or report...</p>', unsafe_allow_html=True)
             
-            # Quick Chips replacing the buttons
-            st.markdown('<div class="chip-button-wrapper">', unsafe_allow_html=True)
-            st.markdown('<p style="font-size: 1rem; color: rgba(255,255,255,0.5); font-weight: 700; text-transform: uppercase;">Quick Examples</p>', unsafe_allow_html=True)
-            c1, c2, c3, _ = st.columns([1.5, 1.5, 1.5, 3])
-            if c1.button("Earnings Report", use_container_width=True): st.session_state.custom_news = "Profits soared 25% YoY, but margins faced slight pressure due to supply constraints."
-            if c2.button("Breaking News", use_container_width=True): st.session_state.custom_news = "Federal reserve maintains interest rates, causing a neutral market plateau today."
-            if c3.button("Market Tweet", use_container_width=True): st.session_state.custom_news = "The CEO's recent departure is deeply concerning. Stock looks doomed."
-            st.markdown('</div>', unsafe_allow_html=True)
-            
-            st.markdown('<p style="margin-top: 25px; font-weight: 600; font-size: 1.25rem; color: #00d4ff;">Input Financial Text</p>', unsafe_allow_html=True)
+            st.markdown('<p style="margin-top: 15px; font-weight: 600; font-size: 1.25rem; color: #00d4ff;">Input Financial Text</p>', unsafe_allow_html=True)
             
             custom_news = st.text_area("Intel Input", height=200, 
                                      value=st.session_state.custom_news,
@@ -904,7 +894,7 @@ elif page == "Sentiment":
         
         st.markdown('<hr style="border-color: rgba(255,255,255,0.1); margin: 30px 0;">', unsafe_allow_html=True)
         
-        _, btn_col, _ = st.columns([1, 2, 1])
+        _, btn_col = st.columns([3, 1])
         with btn_col:
             run_intel = st.button("Analyze Sentiment", type="primary", use_container_width=True)
             
@@ -965,14 +955,11 @@ elif page == "Sentiment":
                         '''
                     
                     st.markdown(f'''
-                        <div class="premium-card">
-                            <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Probability Distribution</p>
-                            {prob_html}
-                            <hr style="border-color: rgba(255,255,255,0.1); margin: 20px 0;">
-                            <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Why this prediction?</p>
-                            <p style="font-size: 0.9rem; color: rgba(255,255,255,0.8); line-height: 1.5;">Sentiment patterns show a high tendency towards <b>{s_label.upper()}</b> momentum based on word valences.</p>
-                        </div>
-                    ''', unsafe_allow_html=True)
+<div class="premium-card">
+    <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Probability Distribution</p>
+    {{prob_html}}
+</div>
+                    '''.replace("{{prob_html}}", prob_html), unsafe_allow_html=True)
         else:
             st.info("Please enter intel text to analyze.")
 
