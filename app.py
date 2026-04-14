@@ -828,6 +828,9 @@ elif page == "Analyzer":
                     <div style="font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-bottom: 5px;">{entry['time']}</div>
                     <div style="font-size: 1.15rem; color: white; font-weight: 700; margin-bottom: 5px;">{entry['ticker']}</div>
                     <div style="font-size: 0.95rem; color: {colr}; font-weight: 700;">{entry['signal']}</div>
+                    <div style="font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-top:5px;">{entry['confidence']:.1%} CF</div>
+                </div>'''
+            hist_html += "</div>"
             st.markdown(hist_html, unsafe_allow_html=True)
 
 # --- Page: Sentiment ---
