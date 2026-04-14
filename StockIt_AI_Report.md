@@ -311,7 +311,7 @@ While the current version is robust, several pathways for expansion exist:
 
 ### 8. Outcome
 **Project Outcome Details:**
-- **Deployment Status:** The application is currently stable and ready for local deployment or hosting on Streamlit Cloud.
+- **Deployment Status:** The platform is live and deployed on Streamlit Cloud. Access the dashboard here: [StockIt AI on Streamlit](https://pblstockit-sgmbrahz3emuheve2fjyfr.streamlit.app/)
 - **Technical Contribution:** Implementation of a custom consensus algorithm that weights Technical signals and AI signals concurrently.
 - **Academic value:** Provides a clear blueprint for student researchers looking to integrate NLP with traditional financial forecasting models.
 

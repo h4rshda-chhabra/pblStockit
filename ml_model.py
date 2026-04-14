@@ -21,10 +21,11 @@ def create_labeled_dataset(stock_id):
 
     df = calculate_indicators(df)
 
-    # Target creation: Predict if price will be > 5% higher in 10 days
+    # Target creation: Predict if price will be > 2% higher in 10 days 
+    # (Lowered from 5% because 5% in 10 days is too rare for large-cap stocks and causes Imbalanced "NO BUY" outputs)
     df['Future_Close'] = df['Close'].shift(-10)
     df.dropna(subset=['Close', 'Future_Close'], inplace=True)
-    df['Target'] = np.where(df['Future_Close'] > df['Close'] * 1.05, 1, 0)
+    df['Target'] = np.where(df['Future_Close'] > df['Close'] * 1.02, 1, 0)
 
     # Use only selected features
     available_features = [f for f in FEATURES if f in df.columns]
@@ -38,9 +39,13 @@ def create_labeled_dataset(stock_id):
 def train_model(stock_id):
     print(f"[ML] Training model for {stock_id}...")
     X, y = create_labeled_dataset(stock_id)
+    
+    if len(X) < 10:
+        raise ValueError(f"Not enough historical data for '{stock_id}'. Needed 200+ trading days to calculate moving averages. Found {len(X)} valid points.")
+        
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    model = RandomForestClassifier(n_estimators=100, random_state=42)
+    model = RandomForestClassifier(n_estimators=100, class_weight='balanced_subsample', max_depth=10, random_state=42)
     model.fit(X_train, y_train)
 
     # Calculate Metrics

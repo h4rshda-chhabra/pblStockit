@@ -1,5 +1,7 @@
 # StockIt AI Analytics
 
+**Live Demo:** [StockIt AI Dashboard](https://pblstockit-sgmbrahz3emuheve2fjyfr.streamlit.app/)
+
 StockIt is an institutional-grade stock analysis and prediction platform. It leverages a hybrid intelligence model that combines quantitative technical indicators with natural language processing of financial news to provide high-accuracy market signals.
 
 ## Features

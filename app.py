@@ -541,11 +541,21 @@ elif page == "Analyzer":
             st.write("Initializing telemetry stream...")
             df = fetch_stock_data(analyze_id, normalize_period(analyze_period))
             
+            if df is None or df.empty:
+                status.update(label="Inference Error", state="error", expanded=True)
+                st.error(f"Failed to fetch market data for '{analyze_id}'. Please check if the ticker symbol is correct.")
+                st.stop()
+                
             st.write("Computing technical manifold...")
             df = calculate_indicators(df)
             
             st.write("Loading ensemble weights...")
-            model, metrics = load_or_train_model(analyze_id)
+            try:
+                model, metrics = load_or_train_model(analyze_id)
+            except ValueError as e:
+                status.update(label="Inference Error", state="error", expanded=True)
+                st.error(f"Cannot process target: {str(e)}")
+                st.stop()
             
             st.write("Running predictive cycle...")
             res_data = ml_predict(model, df)
@@ -676,18 +686,17 @@ elif page == "Analyzer":
                 grad_bg = f"radial-gradient(circle at top right, rgba(238, 221, 136, 0.15) 0%, transparent 60%)"
 
             st.markdown(f'''
-                <div class="premium-card" style="background: {grad_bg}, linear-gradient(160deg, rgba(30, 35, 45, 0.4), rgba(15, 20, 25, 0.8));">
-                    <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Ensemble AI Signal</p>
-                    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 5px;">
-                        <h2 style="color: {base_color}; font-size: 2.8rem; margin: 0; font-weight: 800; line-height: 1;">{c_label}</h2>
-                        <span style="font-size: 2rem; color: {base_color};">{icon}</span>
-                    </div>
-                    
-                    <p style="margin-top: 25px; margin-bottom: 8px; font-size: 0.85rem; color: rgba(255,255,255,0.7); font-weight: 600;">Algorithm Confidence <span style="float: right; color: white;">{res_data['confidence']:.1%}</span></p>
-                    <div style="width: 100%; background: rgba(255,255,255,0.1); border-radius: 4px; height: 8px; overflow: hidden; margin-bottom: 10px;">
-                        <div style="width: {res_data['confidence']*100}%; background: {base_color}; height: 100%; border-radius: 4px; box-shadow: 0 0 10px {base_color}; animation: bar-fill 1s ease-out forwards;"></div>
-                    </div>
-                </div>
+<div class="premium-card" style="background: {grad_bg}, linear-gradient(160deg, rgba(30, 35, 45, 0.4), rgba(15, 20, 25, 0.8));">
+    <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px;">Ensemble AI Signal</p>
+    <div style="display: flex; align-items: baseline; gap: 10px; margin-bottom: 5px;">
+        <h2 style="color: {base_color}; font-size: 2.8rem; margin: 0; font-weight: 800; line-height: 1;">{c_label}</h2>
+        <span style="font-size: 2rem; color: {base_color};">{icon}</span>
+    </div>
+    <p style="margin-top: 25px; margin-bottom: 8px; font-size: 0.85rem; color: rgba(255,255,255,0.7); font-weight: 600;">Algorithm Confidence <span style="float: right; color: white;">{res_data['confidence']:.1%}</span></p>
+    <div style="width: 100%; background: rgba(255,255,255,0.1); border-radius: 4px; height: 8px; overflow: hidden; margin-bottom: 10px;">
+        <div style="width: {res_data['confidence']*100}%; background: {base_color}; height: 100%; border-radius: 4px; box-shadow: 0 0 10px {base_color}; animation: bar-fill 1s ease-out forwards;"></div>
+    </div>
+</div>
             ''', unsafe_allow_html=True)
 
             # Model Health
