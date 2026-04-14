@@ -18,6 +18,13 @@ def apply_custom_style():
         .main .block-container {
             padding-top: 0.5rem !important;
             margin-top: 0 !important;
+            display: flex !important;
+            flex-direction: column !important;
+            align-items: center !important;
+        }
+        
+        .stApp > div {
+            width: 100% !important;
         }
         
         /* Hide default Streamlit elements - Reduced aggressiveness for visibility */
@@ -124,7 +131,9 @@ def apply_custom_style():
             border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 24px;
             padding: 2rem;
-            margin-bottom: 2rem;
+            margin: 0 auto 2rem auto;
+            width: 100%;
+            max-width: 1200px;
             transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
             box-shadow: 0 20px 60px -15px rgba(0,0,0,0.8);
         }
