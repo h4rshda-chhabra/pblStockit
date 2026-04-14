@@ -828,52 +828,71 @@ elif page == "Analyzer":
                     <div style="font-size: 0.75rem; color: rgba(255,255,255,0.4); margin-bottom: 5px;">{entry['time']}</div>
                     <div style="font-size: 1.15rem; color: white; font-weight: 700; margin-bottom: 5px;">{entry['ticker']}</div>
                     <div style="font-size: 0.95rem; color: {colr}; font-weight: 700;">{entry['signal']}</div>
-                    <div style="font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-top:5px;">{entry['confidence']:.1%} CF</div>
-                </div>'''
-            hist_html += "</div>"
             st.markdown(hist_html, unsafe_allow_html=True)
 
 # --- Page: Sentiment ---
 elif page == "Sentiment":
-    header_section("Sentiment Intelligence", "Dual-Core NLP & Mathematical Impact Analysis")
+    header_section("Sentiment Intelligence", "Institutional-Grade Neural Intel & Forecasting")
     
     st.markdown('''
     <style>
         .premium-card {
-            background: linear-gradient(160deg, rgba(30, 35, 45, 0.4), rgba(15, 20, 25, 0.8));
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 16px; padding: 25px; margin-bottom: 25px;
-            box-shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+            background: linear-gradient(165deg, rgba(35, 40, 50, 0.6), rgba(15, 20, 25, 0.9));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px; padding: 30px; margin-bottom: 25px;
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.7);
+            backdrop-filter: blur(20px);
+            transition: all 0.3s ease;
         }
+        .insight-card {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px; padding: 15px 20px; margin-bottom: 12px;
+            border-left: 4px solid #00d4ff;
+        }
+        .signal-chip {
+            background: rgba(0, 212, 255, 0.15); color: #00d4ff;
+            padding: 4px 12px; border-radius: 20px; font-size: 0.8rem;
+            font-weight: 600; display: inline-block; margin-right: 8px; margin-bottom: 8px;
+            border: 1px solid rgba(0, 212, 255, 0.3);
+        }
+        @keyframes countUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .hero-number { animation: countUp 0.8s ease-out forwards; }
     </style>
     ''', unsafe_allow_html=True)
 
-    sec_analysis, sec_quant = st.tabs([" AI Perception (NLP)", " Neural Impact Engine (Math)"])
+    sec_analysis, sec_quant = st.tabs(["🔍 Perception Hub", "⚡ Prediction Forecaster"])
     
     with sec_analysis:
-        st.markdown('<p style="color: rgba(255,255,255,0.7); font-size: 1.1rem; margin-bottom: 25px;">Core linguistic analysis using transformer-based neural networks.</p>', unsafe_allow_html=True)
-        intel_input = st.text_area("Financial Intelligence Input", height=150, placeholder="Paste your news headlines or financial reports here...", key="nlp_input")
+        st.markdown('<div class="premium-card" style="border: 1px solid rgba(0, 212, 255, 0.2);"><p style="color: #00d4ff; font-weight: 700; margin-bottom: 15px;">AI Neural Perception Input</p>', unsafe_allow_html=True)
+        intel_input = st.text_area("Intel Source", height=150, placeholder="Paste financial news headline or earnings update...", label_visibility="collapsed", key="perc_input")
+        st.markdown('</div>', unsafe_allow_html=True)
         
         btn_col, _ = st.columns([1, 2])
         if btn_col.button("RUN AI PERCEPTION", type="primary", use_container_width=True):
             if intel_input.strip():
                 headlines = [h.strip() for h in intel_input.split("\n") if h.strip()]
-                with st.spinner("Decoding sentiment manifold..."):
+                with st.spinner("Analyzing linguistic manifold..."):
                     sentiment = analyze_sentiment(headlines)
                     s_label = sentiment['label']
-                    s_color = "#00ff9d" if "Bull" in s_label or "Pos" in s_label else "#ff4b4b" if "Bear" in s_label or "Neg" in s_label else "#eedd88"
+                    s_score = (sentiment['probabilities'].get('Positive', 0) - sentiment['probabilities'].get('Negative', 0))
+                    s_color = "#00ff9d" if s_score > 0.1 else "#ff4b4b" if s_score < -0.1 else "#eedd88"
+                    conf_level = "High" if sentiment['confidence'] > 0.85 else "Medium" if sentiment['confidence'] > 0.65 else "Low"
+                    keywords = [w for w in ["growth", "revenue", "deal", "profit", "bullish", "momentum", "surge", "gain", "loss", "warning", "cut", "drop"] if w in intel_input.lower()]
                     
                     st.write("<br>", unsafe_allow_html=True)
-                    res_c1, res_c2 = st.columns([1, 1], gap="large")
+                    res_c1, res_c2 = st.columns([1.2, 1], gap="large")
                     with res_c1:
                         st.markdown(f'''
                             <div class="premium-card">
-                                <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Engine Verdict</p>
-                                <h2 style="color: {s_color}; font-size: 2.5rem; margin: 15px 0;">{s_label.upper()}</h2>
-                                <p style="margin-top: 25px; margin-bottom: 8px; font-size: 0.85rem; color: rgba(255,255,255,0.7);">AI Confidence <span style="float: right; color: white;">{sentiment['confidence']:.1%}</span></p>
-                                <div style="width: 100%; background: rgba(255,255,255,0.1); border-radius: 4px; height: 8px; overflow: hidden;">
-                                    <div style="width: {sentiment['confidence']*100}%; background: {s_color}; height: 100%; border-radius: 4px;"></div>
+                                <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Sentiment Verdict</p>
+                                <div style="display: flex; align-items: baseline; gap: 15px;">
+                                    <h2 style="color: {s_color}; font-size: 3rem; margin: 15px 0;">{s_label.upper()}</h2>
+                                    <p style="font-size: 1.2rem; color: rgba(255,255,255,0.5);">Score: {s_score:+.2f}</p>
                                 </div>
+                                <div style="margin-top: 10px;">
+                                    {"".join([f'<span class="signal-chip">{k.upper()}</span>' for k in keywords]) if keywords else '<span style="color: grey; font-size: 0.8rem;">No specific signals detected.</span>'}
+                                </div>
+                                <p style="margin-top: 25px; color: rgba(255,255,255,0.5); font-size: 0.75rem;">AI Confidence: <b>{conf_level} ({sentiment['confidence']:.1%})</b></p>
                             </div>
                         ''', unsafe_allow_html=True)
                     with res_c2:
@@ -881,36 +900,28 @@ elif page == "Sentiment":
                         for lab, pr in sentiment['probabilities'].items():
                             bar_c = "#00ff9d" if lab == "Positive" else "#ff4b4b" if lab == "Negative" else "#eedd88"
                             prob_items += f'''
-                                <div style="margin-bottom: 12px;">
-                                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: white; margin-bottom: 5px;">
+                                <div style="margin-bottom: 20px;">
+                                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: white; margin-bottom: 8px;">
                                         <span>{lab}</span><span>{pr:.1%}</span>
                                     </div>
-                                    <div style="width: 100%; background: rgba(255,255,255,0.1); border-radius: 4px; height: 6px;">
-                                        <div style="width: {pr*100}%; background: {bar_c}; height: 100%; border-radius: 4px;"></div>
+                                    <div style="width: 100%; background: rgba(255,255,255,0.05); border-radius: 4px; height: 8px; border: 1px solid rgba(255,255,255,0.1);">
+                                        <div style="width: {pr*100}%; background: {bar_c}; height: 100%; border-radius: 4px; box-shadow: 0 0 10px {bar_c}66;"></div>
                                     </div>
                                 </div>
                             '''
-                        st.markdown(f'''
-                            <div class="premium-card">
-                                <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Probability Spectrum</p>
-                                {prob_items}
-                            </div>
-                        ''', unsafe_allow_html=True)
+                        st.markdown(f'''<div class="premium-card"><p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Neural Probability Spectrum</p><div style="margin-top: 20px;">{prob_items}</div></div>''', unsafe_allow_html=True)
             else: st.warning("Please enter text to analyze.")
 
     with sec_quant:
-        st.markdown('<p style="color: rgba(255,255,255,0.7); font-size: 1.1rem; margin-bottom: 25px;">Quantifying psychological impact into mathematical price movement predictions.</p>', unsafe_allow_html=True)
+        st.markdown('<p style="color: rgba(255,255,255,0.7); font-size: 1.1rem; margin-bottom: 25px;">Institutional-grade price forecasting based on event-study quantization.</p>', unsafe_allow_html=True)
+        q_inp_c1, q_inp_c2 = st.columns([1, 2])
+        with q_inp_c1: q_ticker = st.text_input("Forecast Target (Ticker)", value="RELIANCE").upper()
+        with q_inp_c2: q_news = st.text_input("High-Impact Event Headline", placeholder="e.g. 'TCS secures ₹500Cr contract win'", key="fore_input")
         
-        q_col1, q_col2 = st.columns([2, 3])
-        with q_col1:
-            q_ticker = st.text_input("Active Ticker Symbol", value="RELIANCE", placeholder="e.g. TCS, AAPL", key="impact_ticker").upper()
-        with q_col2:
-            q_news = st.text_input("Headline for Impact Scaling", placeholder="Paste a single high-impact headline here...", key="impact_news")
-
         st.write("<br>", unsafe_allow_html=True)
-        if st.button("QUANTIFY FUTURE PRICE IMPACT", type="primary", use_container_width=True):
+        if st.button("⚡ GENERATE AI FORECAST", type="primary", use_container_width=True):
             if q_news.strip() and q_ticker:
-                with st.spinner(f"Computing impact manifold for {q_ticker}..."):
+                with st.spinner(f"Calibrating forecast for {q_ticker}..."):
                     news_data = analyze_sentiment([q_news])
                     mkt_df = fetch_stock_data(q_ticker, "1mo")
                     if mkt_df is not None and not mkt_df.empty:
@@ -918,32 +929,22 @@ elif page == "Sentiment":
                         curr_p = mkt_df['Close'].iloc[-1]
                         vol = mkt_df['Close'].pct_change().std()
                         impact = quantify_sentiment_impact(news_data['label'], news_data['confidence'], curr_p, vol)
-                        
                         i_color = "#00ff9d" if impact['price_delta'] >= 0 else "#ff4b4b"
+                        i_glow = "#00ff9d44" if impact['price_delta'] >= 0 else "#ff4b4b44"
+                        i_arrow = "↑" if impact['price_delta'] >= 0 else "↓"
+                        vol_level = "High" if vol > 0.03 else "Moderate" if vol > 0.015 else "Low"
+                        conf_level = "High" if news_data['confidence'] > 0.8 else "Medium" if news_data['confidence'] > 0.6 else "Low"
+                        summary_msg = "upward movement" if impact['price_delta'] > 0 else "downward movement" if impact['price_delta'] < 0 else "stability"
                         
                         st.write("<br>", unsafe_allow_html=True)
-                        iq_c1, iq_c2 = st.columns([1, 1.5], gap="large")
+                        iq_c1, iq_c2 = st.columns([1, 1], gap="large")
                         with iq_c1:
-                            st.markdown(f'''
-                                <div class="premium-card" style="border-left: 5px solid {i_color};">
-                                    <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Neural Move (24h)</p>
-                                    <h2 style="color: {i_color}; font-size: 3rem; margin: 15px 0;">{impact['expected_change_pct']*100:+.2f}%</h2>
-                                    <p style="font-size: 1.2rem; color: white; opacity: 0.9;">₹ {impact['price_delta']:+.2f}</p>
-                                </div>
-                            ''', unsafe_allow_html=True)
+                            st.markdown(f'''<div class="premium-card" style="box-shadow: 0 0 50px {i_glow}; border: 1px solid {i_color}55; text-align: center;"><p style="color: rgba(255,255,255,0.6); font-size: 0.9rem; font-weight: 700; text-transform: uppercase;">AI Forecast (Next 24H)</p><h1 class="hero-number" style="color: {i_color}; font-size: 4.5rem; margin: 20px 0; font-weight: 900;">{i_arrow} {impact['expected_change_pct']*100:+.2f}%</h1><p style="font-size: 1.5rem; color: white; opacity: 0.8;">₹ {impact['price_delta']:+.2f}</p><div style="margin-top: 25px; background: rgba(255,255,255,0.05); padding: 5px 15px; border-radius: 30px;"><span style="color: {i_color}; font-weight: 800; font-size: 0.9rem;">{conf_level.upper()} CONVICTION</span></div></div>''', unsafe_allow_html=True)
                         with iq_c2:
-                            st.markdown(f'''
-                                <div class="premium-card">
-                                    <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Impact Logic</p>
-                                    <p style="font-family: monospace; color: #00d4ff; font-size: 1.11rem; margin: 10px 0;">ΔP = Price × (Score × σ × Confidence × 1.64)</p>
-                                    <hr style="border-color: rgba(255,255,255,0.05); margin: 10px 0;">
-                                    <p style="font-size: 0.85rem; color: rgba(255,255,255,0.7);">
-                                        Volatility (σ): <b>{vol:.2%}</b> | Future Target: <b>₹{impact['predicted_price']:.2f}</b>.
-                                    </p>
-                                </div>
-                            ''', unsafe_allow_html=True)
-                    else: st.error("Market data fetch failed. Check Ticker.")
-            else: st.warning("Provide both Ticker and Headline.")
+                            st.markdown(f'''<div class="premium-card" style="border-right: 4px solid {i_color};"><p style="color: rgba(255,255,255,0.5); font-size: 0.85rem; font-weight: 700; text-transform: uppercase;">AI Reasoning Insights</p><div style="margin-top: 20px;"><div class="insight-card" style="border-color: {i_color};">📈 Headline indicates <b>{news_data['label'].lower()}</b> sentiment.</div><div class="insight-card" style="border-color: #00d4ff;">⚡ Market volatility is <b>{vol_level.lower()}</b>, allowing sentiment to impact price.</div><div class="insight-card" style="border-color: #ffd700;">🧠 Model conviction is <b>{conf_level.lower()}</b> based on linguistic syntax.</div><hr style="border-color: rgba(255,255,255,0.05); margin: 20px 0;"><p style="font-style: italic; color: #00ff9d; font-weight: 600;">"Conclusion: {news_data['label']} perception combined with {vol_level.lower()} volatility suggests a short-term {summary_msg}."</p></div></div>''', unsafe_allow_html=True)
+                    else: st.error("Market data fetch failed.")
+            else: st.warning("Enter both Ticker and Headline.")
+.")
 
 # --- Page: Education ---
         else:
