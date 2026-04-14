@@ -891,15 +891,15 @@ elif page == "Sentiment":
             else: st.warning("Please enter text to analyze.")
 
     with sec_quant:
-        st.markdown('<p style="color: rgba(255,255,255,0.7); font-size: 1.1rem; margin-bottom: 25px;">Institutional-grade price forecasting based on event-study quantization.</p>', unsafe_allow_html=True)
+        st.markdown('<p style="color: rgba(255,255,255,0.7); font-size: 1.1rem; margin-bottom: 25px;">Institutional price forecasting based on calibrated event-study quantization.</p>', unsafe_allow_html=True)
         q_inp_c1, q_inp_c2 = st.columns([1, 2])
-        with q_inp_c1: q_ticker = st.text_input("Forecast Target (Ticker)", value="RELIANCE").upper()
-        with q_inp_c2: q_news = st.text_input("High-Impact Event Headline", placeholder="e.g. 'TCS secures ₹500Cr contract win'", key="fore_input")
+        with q_inp_c1: q_ticker = st.text_input("Forecast Symbol", value="RELIANCE").upper()
+        with q_inp_c2: q_news = st.text_input("Event Specification", placeholder="Paste high-impact headline or news snippet here...", key="fore_input")
         
         st.write("<br>", unsafe_allow_html=True)
-        if st.button("GENERATE AI FORECAST", type="primary", use_container_width=True):
+        if st.button("GENERATE NEURAL FORECAST", type="primary", use_container_width=True):
             if q_news.strip() and q_ticker:
-                with st.spinner(f"Calibrating forecast for {q_ticker}..."):
+                with st.spinner(f"Calibrating system for {q_ticker}..."):
                     news_data = analyze_sentiment([q_news])
                     mkt_df = fetch_stock_data(q_ticker, "1mo")
                     if mkt_df is not None and not mkt_df.empty:
@@ -907,21 +907,61 @@ elif page == "Sentiment":
                         curr_p = mkt_df['Close'].iloc[-1]
                         vol = mkt_df['Close'].pct_change().std()
                         impact = quantify_sentiment_impact(news_data['label'], news_data['confidence'], curr_p, vol)
-                        i_color = "#00ff9d" if impact['price_delta'] >= 0 else "#ff4b4b"
-                        i_glow = "#00ff9d44" if impact['price_delta'] >= 0 else "#ff4b4b44"
-                        i_arrow = "^" if impact['price_delta'] >= 0 else "v"
-                        vol_level = "High" if vol > 0.03 else "Moderate" if vol > 0.015 else "Low"
-                        conf_level = "High" if news_data['confidence'] > 0.8 else "Medium" if news_data['confidence'] > 0.6 else "Low"
-                        summary_msg = "upward movement" if impact['price_delta'] > 0 else "downward movement" if impact['price_delta'] < 0 else "stability"
                         
-                        st.write("<br>", unsafe_allow_html=True)
+                        # Style Mapping
+                        is_bull = impact['price_delta'] >= 0
+                        theme_color = "#00ff9d" if is_bull else "#ff6b6b"
+                        low_color = "#00ff9d22" if is_bull else "#ff6b6b22"
+                        glow_shadow = f"0 0 60px {theme_color}33"
+                        direction_arrow = "↑" if is_bull else "↓"
+                        vol_level = "High" if vol > 0.03 else "Moderate" if vol > 0.015 else "Low"
+                        conf_level = "High" if news_data['confidence'] > 0.8 else "Moderate" if news_data['confidence'] > 0.6 else "Low"
+                        
+                        header_insight = f"AI predicts short-term {'upside' if is_bull else 'downside'} momentum."
+                        
+                        st.markdown(f'<p style="color: white; font-size: 1.4rem; font-weight: 700; margin-bottom: 30px; border-left: 4px solid {theme_color}; padding-left: 15px;">{header_insight}</p>', unsafe_allow_html=True)
+                        
                         iq_c1, iq_c2 = st.columns([1, 1], gap="large")
                         with iq_c1:
-                            st.markdown(f'''<div class="premium-card" style="box-shadow: 0 0 50px {i_glow}; border: 1px solid {i_color}55; text-align: center;"><p style="color: rgba(255,255,255,0.6); font-size: 0.9rem; font-weight: 700; text-transform: uppercase;">AI Forecast (Next 24H)</p><h1 class="hero-number" style="color: {i_color}; font-size: 4.5rem; margin: 20px 0; font-weight: 900;">{i_arrow} {impact['expected_change_pct']*100:+.2f}%</h1><p style="font-size: 1.5rem; color: white; opacity: 0.8;">₹ {impact['price_delta']:+.2f}</p><div style="margin-top: 25px; background: rgba(255,255,255,0.05); padding: 5px 15px; border-radius: 30px;"><span style="color: {i_color}; font-weight: 800; font-size: 0.9rem;">{conf_level.upper()} CONVICTION</span></div></div>''', unsafe_allow_html=True)
+                            st.markdown(f'''
+                                <div class="premium-card" style="box-shadow: {glow_shadow}; border: 1px solid {theme_color}44; text-align: center; border-radius: 24px; hover-elevation: 10px;">
+                                    <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">AI Signal</p>
+                                    <h1 class="hero-number" style="color: {theme_color}; font-size: 4.8rem; margin: 15px 0; font-weight: 900;">{direction_arrow} {abs(impact['expected_change_pct']*100):.2f}%</h1>
+                                    <p style="font-size: 1.6rem; color: white; opacity: 0.9; margin-top: -10px;">₹ {impact['price_delta']:+.2f}</p>
+                                    <div style="margin-top: 25px; background: {low_color}; padding: 8px 20px; border-radius: 50px; display: inline-block;">
+                                        <span style="color: {theme_color}; font-weight: 800; font-size: 0.85rem;">{conf_level.upper()} CONFIDENCE ({news_data['confidence']:.0%})</span>
+                                    </div>
+                                </div>
+                            ''', unsafe_allow_html=True)
                         with iq_c2:
-                            st.markdown(f'''<div class="premium-card" style="border-right: 4px solid {i_color};"><p style="color: rgba(255,255,255,0.5); font-size: 0.85rem; font-weight: 700; text-transform: uppercase;">AI Reasoning Insights</p><div style="margin-top: 20px;"><div class="insight-card" style="border-color: {i_color};">Headline indicates <b>{news_data['label'].lower()}</b> sentiment.</div><div class="insight-card" style="border-color: #00d4ff;">Market volatility is <b>{vol_level.lower()}</b>, allowing sentiment to impact price.</div><div class="insight-card" style="border-color: #ffd700;">Model conviction is <b>{conf_level.lower()}</b> based on linguistic syntax.</div><hr style="border-color: rgba(255,255,255,0.05); margin: 20px 0;"><p style="font-style: italic; color: #00ff9d; font-weight: 600;">"Conclusion: {news_data['label']} perception combined with {vol_level.lower()} volatility suggests a short-term {summary_msg}."</p></div></div>''', unsafe_allow_html=True)
+                            st.markdown(f'''
+                                <div class="premium-card" style="border-radius: 24px; border-right: 4px solid {theme_color};">
+                                    <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Reasoning Matrix</p>
+                                    <div style="margin-top: 25px;">
+                                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
+                                            <span style="color: rgba(255,255,255,0.6);">📉 Sentiment</span>
+                                            <span style="color: white; font-weight: 700;">{news_data['label']}</span>
+                                        </div>
+                                        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.05); margin: 0;">
+                                        <div style="display: flex; align-items: center; justify-content: space-between; margin: 20px 0;">
+                                            <span style="color: rgba(255,255,255,0.6);">⚡ Volatility</span>
+                                            <span style="color: white; font-weight: 700;">{vol_level}</span>
+                                        </div>
+                                        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.05); margin: 0;">
+                                        <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px;">
+                                            <span style="color: rgba(255,255,255,0.6);">🧠 Confidence</span>
+                                            <span style="color: white; font-weight: 700;">{conf_level}</span>
+                                        </div>
+                                    </div>
+                                    <div style="margin-top: 35px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
+                                        <p style="font-style: italic; color: {theme_color}; font-size: 1.1rem; line-height: 1.4; font-weight: 500;">
+                                            Result: The high {news_data['label'].lower()} factor paired with {vol_level.lower()} volatility suggests a definitive short-term move.
+                                        </p>
+                                    </div>
+                                </div>
+                            ''', unsafe_allow_html=True)
                     else: st.error("Market data fetch failed.")
-            else: st.warning("Enter both Ticker and Headline.")
+            else: st.warning("Enter both Symbol and Event specification.")
 
 # --- Page: Education ---
 elif page == "Education":
