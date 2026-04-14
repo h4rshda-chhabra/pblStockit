@@ -848,7 +848,7 @@ elif page == "Sentiment":
     </style>
     ''', unsafe_allow_html=True)
 
-    sec_analysis, sec_quant = st.tabs(["🔍 AI Perception (NLP)", "📊 Neural Impact Engine (Math)"])
+    sec_analysis, sec_quant = st.tabs([" AI Perception (NLP)", " Neural Impact Engine (Math)"])
     
     with sec_analysis:
         st.markdown('<p style="color: rgba(255,255,255,0.7); font-size: 1.1rem; margin-bottom: 25px;">Core linguistic analysis using transformer-based neural networks.</p>', unsafe_allow_html=True)
