@@ -16,8 +16,8 @@ def apply_custom_style():
         }
         
         .main .block-container {
-            padding-top: 1.5rem !important;
-            margin-top: 2vh !important;
+            padding-top: 0.5rem !important;
+            margin-top: 0 !important;
         }
         
         /* Hide default Streamlit elements - Reduced aggressiveness for visibility */
@@ -115,7 +115,7 @@ def apply_custom_style():
         
         /* Layout Buffer */
         .layout-buffer {
-            height: 40px;
+            height: 10px;
         }
         
         /* Premium Design - Precision 24px Radius */
@@ -429,7 +429,7 @@ def render_ticker():
 def header_section(title, subtitle):
     """Renders a consistent centered header for all pages."""
     st.markdown(f"""
-        <div style="text-align: center; padding: 60px 0 40px 0; max-width: 900px; margin: 0 auto;">
+        <div style="text-align: center; padding: 20px 0 30px 0; max-width: 900px; margin: 0 auto;">
             <h1 style="font-size: 4.5rem; font-weight: 900; background: linear-gradient(135deg, #ffffff 30%, #00D9FF 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -3px; line-height: 1; margin-bottom: 20px;">{title}</h1>
             <p style="font-size: 1.35rem; font-weight: 500; color: rgba(255,255,255,0.5); letter-spacing: 0.5px;">{subtitle}</p>
             <div style="width: 50px; height: 4px; background: #00D9FF; margin: 30px auto 0 auto; border-radius: 2px;"></div>
