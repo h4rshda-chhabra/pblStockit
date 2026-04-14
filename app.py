@@ -996,58 +996,86 @@ elif page == "Education":
     search_query = st.text_input("Search Knowledge Base", placeholder="Search for RSI, AI, Random Forest, MACD...").lower()
     st.write("<br>", unsafe_allow_html=True)
     
-    tab1, tab2, tab3 = st.tabs(["Stock Market 101", "Technical Indicators", "Trading Concepts"])
+    tab1, tab2, tab3 = st.tabs(["EQUITY & FUNDAMENTALS", "TECHNICALS & MACRO", "RISK & PSYCHOLOGY"])
     
     with tab1:
         st.markdown("""
-        ### The Architecture of Equity Markets
-        Stocks, or equities, represent a fractional ownership claim on a corporation's assets and earnings. When an investor purchases a share, they are essentially providing capital to a business venture in exchange for potential appreciation and a share of the profits. Markets are divided into the **Primary Market**, where shares are first issued via IPOs (Initial Public Offerings), and the **Secondary Market**, where investors trade these securities amongst themselves. This secondary market provides crucial liquidity, allowing for the continuous valuation of global enterprises.
-
-        ### The Mechanics of Price Discovery and Sentiment
-        The market price of any ticker is not an arbitrary number; it is the result of millions of participants interacting within an electronic limit order book. Buyers (bids) and sellers (asks) negotiate in real-time to find a "Fair Market Value." This equilibrium is constantly disrupted by new information, such as quarterly earnings reports, central bank interest rate decisions, and geopolitical shifts. At **StockIt AI**, we believe that while technical indicators provide the roadmap, human sentiment acts as the engine, which is why our platform correlates both telemetry streams into a single unified verdict.
-
-        ### Institutional Valuation Metrics
-        To build professional-grade confidence in a stock, analysts often look beyond simple price action:
-        - **Price-to-Earnings (P/E) Ratio:** Measures the current share price relative to per-share earnings. It helps determine if a stock is overvalued or undervalued relative to its sector peers.
-        - **Market Capitalization:** The total dollar market value of a company's outstanding shares. It indicates the size and stability of the entity (Large-Cap, Mid-Cap, or Small-Cap).
-        - **Dividend Yield:** A financial ratio showing how much a company pays out in dividends each year relative to its stock price, often indicating a mature, cash-rich business model.
-
-        ### The Role of Market Indices (NIFTY 50 & SENSEX)
-        Market indices act as the pulse of the economy. By tracking a weighted basket of top-tier stocks, indices like the **NIFTY 50** or the **S&P 500** provide a benchmark for performance. If a stock is outperforming its index, it is generating "Alpha"—a key indicator of superior management or a sector-specific tailwind.
+        ## **Section I: The Foundational Architecture of Global Equity**
+        
+        ### **1.1 The Essence of Shareholding**
+        Common stocks represent the residual claim on the assets and earnings of a corporation. In the hierarchy of capital structure, equity holders are "residual claimants," meaning they are the last to be paid after creditors, bondholders, and preferred shareholders in the event of liquidation. However, this positioning grants them the highest potential for **capital appreciation** and the unique right to vote on corporate governance.
+        
+        ### **1.2 Fundamental Analysis: The Search for Intrinsic Value**
+        Fundamental analysis is the rigorous process of calculating the "true value" of a business, independent of its current market price. This discipline is divided into two primary dimensions:
+        
+        #### **A. Quantitative Matrix (The Financial Statements)**
+        To maintain professional trust in your analysis, you must master the **Three Financial Statements**:
+        1.  **The Income Statement (Statement of Operations):** This captures the revenue, expenses, and net profit over a specific reporting period (Quarterly or Annually). Key metrics include Operating Margin (Efficiency) and EBITDA (Earnings Before Interest, Taxes, Depreciation, and Amortization), which is used to compare companies across different tax jurisdictions.
+        2.  **The Balance Sheet:** A snapshot of solvency at a single point in time. It follows the equation: *Assets = Liabilities + Equity*. Analysts use this to calculate the "Current Ratio" (Assets / Liabilities), which determines if a company can survive a short-term cash crunch.
+        3.  **The Cash Flow Statement:** Unlike the Income Statement which uses "Accrual Accounting," the Cash Flow statement tracks actual liquidity. If a company shows high Net Income but negative Operating Cash Flow, it is a massive Red Flag indicating they are not actually collecting cash from their customers.
+        
+        #### **B. Qualitative Matrix (The Business Moat)**
+        Inspired by Warren Buffett’s philosophy, a "Moat" is a company's competitive advantage. We look at:
+        *   **Network Effects:** Platforms like LinkedIn or Visa become exponentially more valuable as the user base grows, creating a barrier that competitors cannot simply "spend" their way past.
+        *   **Intellectual Property:** Patents and proprietary algorithms (like the one powering **StockIt AI**) provide high-margin protection from generic competition.
+        *   **Cost Leadership:** Companies like Walmart or Reliance use massive scale to drive down unit costs to a level where challengers cannot survive a price war.
+        
+        ### **1.3 Dividend Policy and Share Buybacks**
+        Mature companies often distribute profits via dividends or share repurchases. While dividends provide immediate income, share buybacks reduce the total number of shares outstanding, effectively increasing the "Earnings Per Share" (EPS) for remaining investors without requiring any actual business growth.
         """)
 
     with tab2:
-        if "rsi" in search_query or search_query == "":
-            with st.expander("Relative Strength Index (RSI)"):
-                st.markdown("**What is it?** A momentum oscillator that measures the speed and change of price movements on a scale of 0 to 100.")
-                st.markdown("**How to use it:**")
-                st.markdown("- <span class='highlight'>< 30 (Oversold)</span>: Potential rapid buy-bounce opportunity.", unsafe_allow_html=True)
-                st.markdown("- <span style='color:#ff4b4b;font-weight:700;'>> 70 (Overbought)</span>: Potential sell warning. Asset is too hot.", unsafe_allow_html=True)
+        st.markdown("""
+        ## **Section II: Technical Execution, Market Microstructure, and Macro Dynamics**
         
-        if "macd" in search_query or search_query == "":
-            with st.expander("Moving Average Convergence Divergence (MACD)"):
-                st.markdown("**What is it?** A trend-following momentum indicator that shows the relationship between two moving averages of a stock's price.")
-                st.markdown("**How to use it:**")
-                st.markdown("- **Bullish Action**: MACD line crosses *above* the signal line.")
-                st.markdown("- **Bearish Action**: MACD line crosses *below* the signal line.")
-                
-        if "sma" in search_query or "average" in search_query or search_query == "":
-            with st.expander("Simple Moving Average (SMA & EMA)"):
-                st.markdown("**What is it?** An arithmetic moving average calculating the average price over a specific number of days. EMA (Exponential) gives more weight to recent prices.")
-                st.markdown("**Key Patterns:**")
-                st.markdown("- **Golden Cross**: 50-day SMA crosses *above* the 200-day SMA (<span class='highlight'>Very Bullish</span>).", unsafe_allow_html=True)
-                st.markdown("- **Death Cross**: 50-day SMA crosses *below* the 200-day SMA (<span style='color:#ff4b4b;font-weight:700;'>Very Bearish</span>).", unsafe_allow_html=True)
+        ### **2.1 The Philosophy of Technical Analysis**
+        Technical Analysis is the study of human crowd psychology. It operates on the thesis that "History Repeats Itself" because human nature (Greed and Fear) never changes. Charts are simply the visual representation of this conflict.
+        
+        ### **2.2 Advanced Technical Manifolds**
+        *   **Support and Resistance (The S/R Mechanism):** Support represents a price level where "Buying Pressure" outweighs "Selling Pressure." Resistance is the opposite. When a Resistance level is broken, it often flips and becomes the new Support level—a concept known as "Polarity."
+        *   **RSI Divergence Clusters:** When a stock hits a New High, but the RSI hits a Lower High, it indicates that the underlying "Buying Volume" is exhausted. This is often the precursor to a 10-20% correction.
+        *   **Moving Average Ribboning:** By layering the 20, 50, and 200 CMAs, we can identify "Trend Velocity." If the 20 is above the 50, and the 50 is above the 200, the stock is in a persistent "Parabolic Run."
+        
+        ### **2.3 Macroeconomic Gravity: The Global Tide**
+        1.  **Monetary Policy (The Central Bank):** The Fed and RBI use "Interest Rates" to control inflation. High rates "Discount" future valuations, making Tech stocks less valuable today. Low rates create "Liquidity Bubbles" where asset prices soar.
+        2.  **The Yield Curve:** When 2-year bond interests are higher than 10-year interests, the curve is "Inverted." Historically, an inverted yield curve is the most accurate predictor of an upcoming Recession.
+        3.  **Currency Fluctuations:** For IT companies like TCS or Infosys, a "Strong Dollar" is excellent because they earn in USD but spend in INR. A "Weak Dollar" hits their profit margins directly.
+        """)
     
     with tab3:
-        if "confidence" in search_query or search_query == "":
-            with st.expander("Algorithm Confidence vs Probability"):
-                st.markdown("**Concept:** A model throwing a 51% confidence is guessing. A model throwing 95% is statistically certain.")
-                st.markdown("In our system, the confidence interval dictates the intensity of the signal. We only issue structural BUY flags when the underlying decision forest reaches a super-majority consensus regarding a future baseline price jump.")
+        st.markdown("""
+        ## **Section III: Professional Risk Management and Behavioral Bias**
         
-        if "alpha" in search_query or search_query == "":
-            with st.expander("Generating Alpha"):
-                st.markdown("**Concept:** Alpha represents the active return on an investment compared to a market index or benchmark.")
-                st.markdown("This dashboard aims to isolate edge-case data points (Alpha) by compounding multi-modal telemetry (technical numbers + human sentiment semantics) in real-time.")
+        ### **3.1 Position Sizing (The Grail of Trading)**
+        Most traders fail not because their entries are bad, but because their "Position Size" is too large. 
+        *   **Risk Per Trade:** If your Stop-Loss is ₹10 away, and you want to risk only ₹1,000, you can only buy 100 shares. 
+        *   **Concentration Risk:** Never put more than 20% of your total capital into a single sector. If the IT sector crashes due to a global policy change, your entire portfolio must not be wiped out.
+        
+        ### **3.2 Behavioral Finance: Decoding the Irrational Mind**
+        *   **The Sunk Cost Fallacy:** Holding a stock down 50% because "I’ve already lost so much, it has to come back." Markets do not care about your entry price.
+        *   **Recency Bias:** Believing that because a stock went up for the last 3 days, it will go up on the 4th day. This is how retail investors are lured into "Blow-off Tops."
+        *   **The Dunning-Kruger Effect:** New traders often have a small win-streak and believe they have "solved the market," leading them to increase leverage right before a major crash.
+        
+        ### **3.3 Strategic Asset Allocation**
+        Professional portfolios follow the **Core-Satellite Model**:
+        *   **70% Core:** Allocated to stable, Large-Cap Blue Chip stocks or Index Funds for long-term growth.
+        *   **30% Satellite:** Allocated to high-growth, AI-identified breakout stocks (using the **StockIt AI** engine) to generate "Excess Returns" or Alpha.
+        """)
+
+    st.markdown("---")
+    st.markdown("""
+    ### **🎓 Academic and Professional References**
+    The educational data on this platform is curated from university-level financial curriculum and institutional research papers:
+    
+    1.  **Graham, B. (1949).** *The Intelligent Investor.* Harper & Row Publishing.
+    2.  **Malkiel, B. (1973).** *A Random Walk Down Wall Street.* W. W. Norton & Company.
+    3.  **Kahneman, D., & Tversky, A. (1979).** *Prospect Theory: An Analysis of Decision under Risk.* Econometrica.
+    4.  **CFA Institute.** *Equity Valuation and Market Microstructure Level II Curriculum.*
+    5.  **Shiller, R. J. (2000).** *Irrational Exuberance.* Princeton University Press.
+    6.  **Dalio, R. (2018).** *Principles for Navigating Big Debt Crises.* Bridgewater Associates Research.
+    7.  **Yagan, D. (2019).** *Capital Gains and Economic Inequality.* University of California, Berkeley.
+    8.  **Poundstone, W. (2005).** *Fortune's Formula: The Scientific Betting System that Beat the Casinos and Wall Street.*
+    """)
 
     pages = ["Home", "Analyzer", "Market", "Sentiment", "Education"]
     if "current_page" not in st.session_state:
