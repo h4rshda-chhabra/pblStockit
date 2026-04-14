@@ -863,7 +863,7 @@ elif page == "Sentiment":
     </style>
     ''', unsafe_allow_html=True)
 
-    sec_analysis, sec_quant = st.tabs(["🔍 Perception Hub", "⚡ Prediction Forecaster"])
+    sec_analysis, sec_quant = st.tabs(["Perception Hub", "Prediction Forecaster"])
     
     with sec_analysis:
         st.markdown('<div class="premium-card" style="border: 1px solid rgba(0, 212, 255, 0.2);"><p style="color: #00d4ff; font-weight: 700; margin-bottom: 15px;">AI Neural Perception Input</p>', unsafe_allow_html=True)
@@ -899,10 +899,10 @@ elif page == "Sentiment":
                             </div>
                         ''', unsafe_allow_html=True)
                     with res_c2:
-                        prob_items = ""
+                        prob_html = '<div class="premium-card"><p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Neural Probability Spectrum</p><div style="margin-top: 20px;">'
                         for lab, pr in sentiment['probabilities'].items():
                             bar_c = "#00ff9d" if lab == "Positive" else "#ff4b4b" if lab == "Negative" else "#eedd88"
-                            prob_items += f'''
+                            prob_html += f'''
                                 <div style="margin-bottom: 20px;">
                                     <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: white; margin-bottom: 8px;">
                                         <span>{lab}</span><span>{pr:.1%}</span>
@@ -912,7 +912,8 @@ elif page == "Sentiment":
                                     </div>
                                 </div>
                             '''
-                        st.markdown(f'''<div class="premium-card"><p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Neural Probability Spectrum</p><div style="margin-top: 20px;">{prob_items}</div></div>''', unsafe_allow_html=True)
+                        prob_html += "</div></div>"
+                        st.markdown(prob_html, unsafe_allow_html=True)
             else: st.warning("Please enter text to analyze.")
 
     with sec_quant:
@@ -922,7 +923,7 @@ elif page == "Sentiment":
         with q_inp_c2: q_news = st.text_input("High-Impact Event Headline", placeholder="e.g. 'TCS secures ₹500Cr contract win'", key="fore_input")
         
         st.write("<br>", unsafe_allow_html=True)
-        if st.button("⚡ GENERATE AI FORECAST", type="primary", use_container_width=True):
+        if st.button("GENERATE AI FORECAST", type="primary", use_container_width=True):
             if q_news.strip() and q_ticker:
                 with st.spinner(f"Calibrating forecast for {q_ticker}..."):
                     news_data = analyze_sentiment([q_news])
@@ -934,7 +935,7 @@ elif page == "Sentiment":
                         impact = quantify_sentiment_impact(news_data['label'], news_data['confidence'], curr_p, vol)
                         i_color = "#00ff9d" if impact['price_delta'] >= 0 else "#ff4b4b"
                         i_glow = "#00ff9d44" if impact['price_delta'] >= 0 else "#ff4b4b44"
-                        i_arrow = "↑" if impact['price_delta'] >= 0 else "↓"
+                        i_arrow = "^" if impact['price_delta'] >= 0 else "v"
                         vol_level = "High" if vol > 0.03 else "Moderate" if vol > 0.015 else "Low"
                         conf_level = "High" if news_data['confidence'] > 0.8 else "Medium" if news_data['confidence'] > 0.6 else "Low"
                         summary_msg = "upward movement" if impact['price_delta'] > 0 else "downward movement" if impact['price_delta'] < 0 else "stability"
@@ -944,7 +945,7 @@ elif page == "Sentiment":
                         with iq_c1:
                             st.markdown(f'''<div class="premium-card" style="box-shadow: 0 0 50px {i_glow}; border: 1px solid {i_color}55; text-align: center;"><p style="color: rgba(255,255,255,0.6); font-size: 0.9rem; font-weight: 700; text-transform: uppercase;">AI Forecast (Next 24H)</p><h1 class="hero-number" style="color: {i_color}; font-size: 4.5rem; margin: 20px 0; font-weight: 900;">{i_arrow} {impact['expected_change_pct']*100:+.2f}%</h1><p style="font-size: 1.5rem; color: white; opacity: 0.8;">₹ {impact['price_delta']:+.2f}</p><div style="margin-top: 25px; background: rgba(255,255,255,0.05); padding: 5px 15px; border-radius: 30px;"><span style="color: {i_color}; font-weight: 800; font-size: 0.9rem;">{conf_level.upper()} CONVICTION</span></div></div>''', unsafe_allow_html=True)
                         with iq_c2:
-                            st.markdown(f'''<div class="premium-card" style="border-right: 4px solid {i_color};"><p style="color: rgba(255,255,255,0.5); font-size: 0.85rem; font-weight: 700; text-transform: uppercase;">AI Reasoning Insights</p><div style="margin-top: 20px;"><div class="insight-card" style="border-color: {i_color};">📈 Headline indicates <b>{news_data['label'].lower()}</b> sentiment.</div><div class="insight-card" style="border-color: #00d4ff;">⚡ Market volatility is <b>{vol_level.lower()}</b>, allowing sentiment to impact price.</div><div class="insight-card" style="border-color: #ffd700;">🧠 Model conviction is <b>{conf_level.lower()}</b> based on linguistic syntax.</div><hr style="border-color: rgba(255,255,255,0.05); margin: 20px 0;"><p style="font-style: italic; color: #00ff9d; font-weight: 600;">"Conclusion: {news_data['label']} perception combined with {vol_level.lower()} volatility suggests a short-term {summary_msg}."</p></div></div>''', unsafe_allow_html=True)
+                            st.markdown(f'''<div class="premium-card" style="border-right: 4px solid {i_color};"><p style="color: rgba(255,255,255,0.5); font-size: 0.85rem; font-weight: 700; text-transform: uppercase;">AI Reasoning Insights</p><div style="margin-top: 20px;"><div class="insight-card" style="border-color: {i_color};">Headline indicates <b>{news_data['label'].lower()}</b> sentiment.</div><div class="insight-card" style="border-color: #00d4ff;">Market volatility is <b>{vol_level.lower()}</b>, allowing sentiment to impact price.</div><div class="insight-card" style="border-color: #ffd700;">Model conviction is <b>{conf_level.lower()}</b> based on linguistic syntax.</div><hr style="border-color: rgba(255,255,255,0.05); margin: 20px 0;"><p style="font-style: italic; color: #00ff9d; font-weight: 600;">"Conclusion: {news_data['label']} perception combined with {vol_level.lower()} volatility suggests a short-term {summary_msg}."</p></div></div>''', unsafe_allow_html=True)
                     else: st.error("Market data fetch failed.")
             else: st.warning("Enter both Ticker and Headline.")
 
