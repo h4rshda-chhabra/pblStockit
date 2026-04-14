@@ -11,7 +11,7 @@ import os
 
 # Fixed feature set
 FEATURES = ['SMA_50', 'SMA_200', 'EMA_50', 'EMA_200', 'RSI', 'MACD', 'Signal_Line']
-MODEL_DIR = os.path.join(os.path.dirname(__file__), "models_v4")
+MODEL_DIR = os.path.join(os.path.dirname(__file__), "models_v5")
 
 def normalize_features_for_model(features_df, close_series):
     norm_df = features_df.copy()
@@ -56,7 +56,7 @@ def train_model(stock_id):
         
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    model = RandomForestClassifier(n_estimators=100, class_weight='balanced_subsample', max_depth=10, random_state=42)
+    model = RandomForestClassifier(n_estimators=100, max_depth=10, random_state=42)
     model.fit(X_train, y_train)
 
     # Calculate Metrics
