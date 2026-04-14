@@ -11,7 +11,7 @@ import os
 
 # Fixed feature set
 FEATURES = ['SMA_50', 'SMA_200', 'EMA_50', 'EMA_200', 'RSI', 'MACD', 'Signal_Line']
-MODEL_DIR = os.path.join(os.path.dirname(__file__), "models_v3")
+MODEL_DIR = os.path.join(os.path.dirname(__file__), "models_v4")
 
 def normalize_features_for_model(features_df, close_series):
     norm_df = features_df.copy()
@@ -29,11 +29,11 @@ def create_labeled_dataset(stock_id):
 
     df = calculate_indicators(df)
 
-    # Target creation: Predict if price will be higher in 10 days 
-    # (Lowered to any gain to balance the dataset naturally)
+    # Target creation: Predict if price will be > 1% higher in 10 days
+    # This prevents the AI from turning hyper-bullish on flat-lining stocks
     df['Future_Close'] = df['Close'].shift(-10)
     df.dropna(subset=['Close', 'Future_Close'], inplace=True)
-    df['Target'] = np.where(df['Future_Close'] > df['Close'], 1, 0)
+    df['Target'] = np.where(df['Future_Close'] > df['Close'] * 1.01, 1, 0)
 
     # Use only selected features
     available_features = [f for f in FEATURES if f in df.columns]
@@ -105,8 +105,8 @@ def ml_predict(model, stock_data):
     prediction = model.predict(latest_df)[0]
     probs = model.predict_proba(latest_df)[0]
     
-    # Custom Prediction Threshold (Reverted to genuine AI mode)
-    if probs[1] >= 0.45:
+    # Genuine Prediction Threshold (Requiring strict 50% majority probability)
+    if probs[1] > 0.50:
         pred_idx = 1
         label = "BUY"
         confidence = probs[1]
