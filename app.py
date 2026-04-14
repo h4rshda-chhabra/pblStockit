@@ -996,9 +996,27 @@ elif page == "Education":
     search_query = st.text_input("Search Knowledge Base", placeholder="Search for RSI, AI, Random Forest, MACD...").lower()
     st.write("<br>", unsafe_allow_html=True)
     
-    tab1, tab2, tab3 = st.tabs(["Technical Indicators", "AI Models", "Trading Concepts"])
+    tab1, tab2, tab3 = st.tabs(["Stock Market 101", "Technical Indicators", "Trading Concepts"])
     
     with tab1:
+        st.markdown("""
+        ### The Architecture of Equity Markets
+        Stocks, or equities, represent a fractional ownership claim on a corporation's assets and earnings. When an investor purchases a share, they are essentially providing capital to a business venture in exchange for potential appreciation and a share of the profits. Markets are divided into the **Primary Market**, where shares are first issued via IPOs (Initial Public Offerings), and the **Secondary Market**, where investors trade these securities amongst themselves. This secondary market provides crucial liquidity, allowing for the continuous valuation of global enterprises.
+
+        ### The Mechanics of Price Discovery and Sentiment
+        The market price of any ticker is not an arbitrary number; it is the result of millions of participants interacting within an electronic limit order book. Buyers (bids) and sellers (asks) negotiate in real-time to find a "Fair Market Value." This equilibrium is constantly disrupted by new information, such as quarterly earnings reports, central bank interest rate decisions, and geopolitical shifts. At **StockIt AI**, we believe that while technical indicators provide the roadmap, human sentiment acts as the engine, which is why our platform correlates both telemetry streams into a single unified verdict.
+
+        ### Institutional Valuation Metrics
+        To build professional-grade confidence in a stock, analysts often look beyond simple price action:
+        - **Price-to-Earnings (P/E) Ratio:** Measures the current share price relative to per-share earnings. It helps determine if a stock is overvalued or undervalued relative to its sector peers.
+        - **Market Capitalization:** The total dollar market value of a company's outstanding shares. It indicates the size and stability of the entity (Large-Cap, Mid-Cap, or Small-Cap).
+        - **Dividend Yield:** A financial ratio showing how much a company pays out in dividends each year relative to its stock price, often indicating a mature, cash-rich business model.
+
+        ### The Role of Market Indices (NIFTY 50 & SENSEX)
+        Market indices act as the pulse of the economy. By tracking a weighted basket of top-tier stocks, indices like the **NIFTY 50** or the **S&P 500** provide a benchmark for performance. If a stock is outperforming its index, it is generating "Alpha"—a key indicator of superior management or a sector-specific tailwind.
+        """)
+
+    with tab2:
         if "rsi" in search_query or search_query == "":
             with st.expander("Relative Strength Index (RSI)"):
                 st.markdown("**What is it?** A momentum oscillator that measures the speed and change of price movements on a scale of 0 to 100.")
@@ -1020,17 +1038,6 @@ elif page == "Education":
                 st.markdown("- **Golden Cross**: 50-day SMA crosses *above* the 200-day SMA (<span class='highlight'>Very Bullish</span>).", unsafe_allow_html=True)
                 st.markdown("- **Death Cross**: 50-day SMA crosses *below* the 200-day SMA (<span style='color:#ff4b4b;font-weight:700;'>Very Bearish</span>).", unsafe_allow_html=True)
     
-    with tab2:
-        if "random" in search_query or "forest" in search_query or search_query == "":
-            with st.expander("Random Forest Classifier (StockIt Base Model)"):
-                st.markdown("**What is it?** An ensemble learning method that operates by constructing a multitude of decision trees at training time.")
-                st.markdown("**Why we use it in Finance:** To map highly complex, non-linear relationships between diverse technical indicators without overfitting to noise like linear models do.")
-                
-        if "nlp" in search_query or "sentiment" in search_query or "finbert" in search_query or search_query == "":
-            with st.expander("FinBERT Transformer Neural Net"):
-                st.markdown("**What is it?** A massive pre-trained NLP model built by Google specifically tailored to parse sentiment in financial text.")
-                st.markdown("**Why we use it over traditional sentiment:** Standard models fail to understand that 'earnings drop' is terrible but 'inflation drop' is excellent. FinBERT understands Wall Street jargon.")
-                
     with tab3:
         if "confidence" in search_query or search_query == "":
             with st.expander("Algorithm Confidence vs Probability"):
