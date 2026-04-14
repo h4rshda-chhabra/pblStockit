@@ -872,14 +872,6 @@ elif page == "Sentiment":
     if "custom_news" not in st.session_state:
         st.session_state.custom_news = ""
 
-    with st.container():
-        sub_c1, sub_c2 = st.columns([1, 1])
-        with sub_c1:
-            impact_ticker = st.text_input("Link to Ticker (Optional)", value="RELIANCE", placeholder="e.g. AAPL, TCS").upper()
-        with sub_c2:
-            st.write("<br>", unsafe_allow_html=True)
-            impact_calc_on = st.checkbox("Quantify Price Impact", value=True)
-            
         tab_text, tab_news = st.tabs(["Paste Text", "Analyze News"])
         
         with tab_text:
@@ -900,8 +892,14 @@ elif page == "Sentiment":
         
         st.markdown('<hr style="border-color: rgba(255,255,255,0.1); margin: 30px 0;">', unsafe_allow_html=True)
         
-        _, btn_col = st.columns([3, 1])
-        with btn_col:
+        c_left, c_mid, c_right = st.columns([1.5, 1, 1])
+        with c_left:
+            impact_ticker = st.text_input("Impact Ticker", value="RELIANCE", placeholder="e.g. TCS").upper()
+        with c_mid:
+            st.write("<br>", unsafe_allow_html=True)
+            impact_calc_on = st.checkbox("Calc. Impact", value=True)
+        with c_right:
+            st.write("<br>", unsafe_allow_html=True)
             run_intel = st.button("Analyze Sentiment", type="primary", use_container_width=True)
             
         st.markdown('</div>', unsafe_allow_html=True)
@@ -963,9 +961,9 @@ elif page == "Sentiment":
                     st.markdown(f'''
 <div class="premium-card">
     <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Probability Distribution</p>
-    {{prob_html}}
+    {prob_html}
 </div>
-                    '''.replace("{{prob_html}}", prob_html), unsafe_allow_html=True)
+                    ''', unsafe_allow_html=True)
 
                 if impact_calc_on and impact_ticker:
                     with st.spinner(f"Quantifying impact for {impact_ticker}..."):
