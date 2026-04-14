@@ -874,37 +874,20 @@ elif page == "Sentiment":
                     keywords = [w for w in ["growth", "revenue", "deal", "profit", "bullish", "momentum", "surge", "gain", "loss", "warning", "cut", "drop"] if w in intel_input.lower()]
                     
                     st.write("<br>", unsafe_allow_html=True)
-                    res_c1, res_c2 = st.columns([1.2, 1], gap="large")
-                    with res_c1:
-                        st.markdown(f'''
-                            <div class="premium-card">
-                                <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Sentiment Verdict</p>
-                                <div style="display: flex; align-items: baseline; gap: 15px;">
-                                    <h2 style="color: {s_color}; font-size: 3rem; margin: 15px 0;">{s_label.upper()}</h2>
-                                    <p style="font-size: 1.2rem; color: rgba(255,255,255,0.5);">Score: {s_score:+.2f}</p>
-                                </div>
-                                <div style="margin-top: 10px;">
-                                    {"".join([f'<span class="signal-chip">{k.upper()}</span>' for k in keywords]) if keywords else '<span style="color: grey; font-size: 0.8rem;">No specific signals detected.</span>'}
-                                </div>
-                                <p style="margin-top: 25px; color: rgba(255,255,255,0.5); font-size: 0.75rem;">AI Confidence: <b>{conf_level} ({sentiment['confidence']:.1%})</b></p>
+                    st.markdown(f'''
+                        <div class="premium-card">
+                            <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Sentiment Verdict</p>
+                            <div style="display: flex; align-items: baseline; gap: 15px;">
+                                <h2 style="color: {s_color}; font-size: 3.5rem; margin: 15px 0;">{s_label.upper()}</h2>
+                                <p style="font-size: 1.4rem; color: rgba(255,255,255,0.5);">Score: {s_score:+.2f}</p>
                             </div>
-                        ''', unsafe_allow_html=True)
-                    with res_c2:
-                        prob_html = '<div class="premium-card"><p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Neural Probability Spectrum</p><div style="margin-top: 20px;">'
-                        for lab, pr in sentiment['probabilities'].items():
-                            bar_c = "#00ff9d" if lab == "Positive" else "#ff4b4b" if lab == "Negative" else "#eedd88"
-                            prob_html += f'''
-                                <div style="margin-bottom: 20px;">
-                                    <div style="display: flex; justify-content: space-between; font-size: 0.85rem; color: white; margin-bottom: 8px;">
-                                        <span>{lab}</span><span>{pr:.1%}</span>
-                                    </div>
-                                    <div style="width: 100%; background: rgba(255,255,255,0.05); border-radius: 4px; height: 8px; border: 1px solid rgba(255,255,255,0.1);">
-                                        <div style="width: {pr*100}%; background: {bar_c}; height: 100%; border-radius: 4px; box-shadow: 0 0 10px {bar_c}66;"></div>
-                                    </div>
-                                </div>
-                            '''
-                        prob_html += "</div></div>"
-                        st.markdown(prob_html, unsafe_allow_html=True)
+                            <div style="margin-top: 15px;">
+                                {"".join([f'<span class="signal-chip">{k.upper()}</span>' for k in keywords]) if keywords else '<span style="color: grey; font-size: 0.8rem;">No specific signals detected.</span>'}
+                            </div>
+                            <hr style="border-color: rgba(255,255,255,0.05); margin: 25px 0;">
+                            <p style="color: rgba(255,255,255,0.5); font-size: 0.85rem;">Neural Confidence: <b>{conf_level} ({sentiment['confidence']:.1%})</b></p>
+                        </div>
+                    ''', unsafe_allow_html=True)
             else: st.warning("Please enter text to analyze.")
 
     with sec_quant:
