@@ -21,11 +21,11 @@ def create_labeled_dataset(stock_id):
 
     df = calculate_indicators(df)
 
-    # Target creation: Predict if price will be > 2% higher in 10 days 
-    # (Lowered from 5% because 5% in 10 days is too rare for large-cap stocks and causes Imbalanced "NO BUY" outputs)
+    # Target creation: Predict if price will be higher in 10 days 
+    # (Lowered to any gain to balance the dataset naturally)
     df['Future_Close'] = df['Close'].shift(-10)
     df.dropna(subset=['Close', 'Future_Close'], inplace=True)
-    df['Target'] = np.where(df['Future_Close'] > df['Close'] * 1.02, 1, 0)
+    df['Target'] = np.where(df['Future_Close'] > df['Close'], 1, 0)
 
     # Use only selected features
     available_features = [f for f in FEATURES if f in df.columns]
