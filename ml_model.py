@@ -92,11 +92,16 @@ def ml_predict(model, stock_data):
     prediction = model.predict(latest_df)[0]
     probs = model.predict_proba(latest_df)[0]
     
-    # Use integer indexing and handle confidence correctly
-    pred_idx = int(prediction)
-    confidence = probs[pred_idx]
-
-    label = "BUY" if pred_idx == 1 else "NO BUY"
+    # Custom Prediction Threshold
+    # If the probability of a gain is greater than 45% (rather than strict 50%), consider it an ascending setup.
+    if probs[1] >= 0.45:
+        pred_idx = 1
+        label = "BUY"
+        confidence = probs[1]
+    else:
+        pred_idx = 0
+        label = "NO BUY"
+        confidence = probs[0]
     
     # Get Global Feature Importance
     importances = model.feature_importances_
