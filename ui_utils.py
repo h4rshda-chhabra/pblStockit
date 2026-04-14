@@ -429,9 +429,10 @@ def render_ticker():
 def header_section(title, subtitle):
     """Renders a consistent centered header for all pages."""
     st.markdown(f"""
-        <div class="centered-layout">
-            <h1 style="font-size: 3.5rem; font-weight: 800; background: linear-gradient(120deg, #ffffff 0%, #00d4ff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">{title}</h1>
-            <p style="font-size: 1.25rem; font-weight: 400; color: rgba(255,255,255,0.6); margin-bottom: 3rem;">{subtitle}</p>
+        <div style="text-align: center; padding: 60px 0 40px 0; max-width: 900px; margin: 0 auto;">
+            <h1 style="font-size: 4.5rem; font-weight: 900; background: linear-gradient(135deg, #ffffff 30%, #00D9FF 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -3px; line-height: 1; margin-bottom: 20px;">{title}</h1>
+            <p style="font-size: 1.35rem; font-weight: 500; color: rgba(255,255,255,0.5); letter-spacing: 0.5px;">{subtitle}</p>
+            <div style="width: 50px; height: 4px; background: #00D9FF; margin: 30px auto 0 auto; border-radius: 2px;"></div>
         </div>
     """, unsafe_allow_html=True)
 
