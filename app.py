@@ -868,7 +868,7 @@ elif page == "Sentiment":
                 with st.spinner("Analyzing linguistic manifold..."):
                     sentiment = analyze_sentiment(headlines)
                     s_label = sentiment['label']
-                    s_score = (sentiment['probabilities'].get('Positive', 0) - sentiment['probabilities'].get('Negative', 0))
+                    s_score = (sentiment['probabilities'].get('Bullish', 0) - sentiment['probabilities'].get('Bearish', 0))
                     s_color = "#00ff9d" if s_score > 0.1 else "#ff4b4b" if s_score < -0.1 else "#eedd88"
                     conf_level = "High" if sentiment['confidence'] > 0.85 else "Medium" if sentiment['confidence'] > 0.65 else "Low"
                     keywords = [w for w in ["growth", "revenue", "deal", "profit", "bullish", "momentum", "surge", "gain", "loss", "warning", "cut", "drop"] if w in intel_input.lower()]
