@@ -11,7 +11,15 @@ import os
 
 # Fixed feature set
 FEATURES = ['SMA_50', 'SMA_200', 'EMA_50', 'EMA_200', 'RSI', 'MACD', 'Signal_Line']
-MODEL_DIR = os.path.join(os.path.dirname(__file__), "models_v2")
+MODEL_DIR = os.path.join(os.path.dirname(__file__), "models_v3")
+
+def normalize_features_for_model(features_df, close_series):
+    norm_df = features_df.copy()
+    for col in ['SMA_50', 'SMA_200', 'EMA_50', 'EMA_200']:
+        norm_df[col] = (norm_df[col] - close_series) / close_series
+    norm_df['MACD'] = norm_df['MACD'] / close_series
+    norm_df['Signal_Line'] = norm_df['Signal_Line'] / close_series
+    return norm_df
 
 def create_labeled_dataset(stock_id):
     # Use central fetch logic with 5y data for training
@@ -32,7 +40,10 @@ def create_labeled_dataset(stock_id):
     if len(available_features) < len(FEATURES):
         raise ValueError(f"Missing indicators in dataset. Needed: {FEATURES}")
 
-    features = df[FEATURES].dropna()
+    features = df[FEATURES].copy()
+    features = normalize_features_for_model(features, df['Close'])
+    features = features.dropna()
+    
     target = df.loc[features.index, 'Target']
     return features, target
 
@@ -81,7 +92,9 @@ def load_or_train_model(stock_id):
 
 def ml_predict(model, stock_data):
     # Ensure indicators are calculated
-    processed_data = stock_data[FEATURES].dropna()
+    processed_data = stock_data[FEATURES].copy()
+    processed_data = normalize_features_for_model(processed_data, stock_data['Close'])
+    processed_data = processed_data.dropna()
     
     if processed_data.empty:
         raise ValueError("Insufficient data to calculate technical indicators. Please select a longer timeframe (e.g., 1y).")
@@ -92,12 +105,11 @@ def ml_predict(model, stock_data):
     prediction = model.predict(latest_df)[0]
     probs = model.predict_proba(latest_df)[0]
     
-    # Custom Prediction Threshold
-    # TEMPORARY DEMO OVERRIDE: Set threshold to 0.0 to essentially force a BUY signal for presentation screenshots.
-    if probs[1] >= 0.0:
+    # Custom Prediction Threshold (Reverted to genuine AI mode)
+    if probs[1] >= 0.45:
         pred_idx = 1
         label = "BUY"
-        confidence = probs[1] if probs[1] > 0.50 else (1 - probs[1]) # Make confidence look high
+        confidence = probs[1]
     else:
         pred_idx = 0
         label = "NO BUY"
