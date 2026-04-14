@@ -873,7 +873,13 @@ elif page == "Sentiment":
         st.session_state.custom_news = ""
 
     with st.container():
-        
+        sub_c1, sub_c2 = st.columns([1, 1])
+        with sub_c1:
+            impact_ticker = st.text_input("Link to Ticker (Optional)", value="RELIANCE", placeholder="e.g. AAPL, TCS").upper()
+        with sub_c2:
+            st.write("<br>", unsafe_allow_html=True)
+            impact_calc_on = st.checkbox("Quantify Price Impact", value=True)
+            
         tab_text, tab_news = st.tabs(["Paste Text", "Analyze News"])
         
         with tab_text:
@@ -960,6 +966,40 @@ elif page == "Sentiment":
     {{prob_html}}
 </div>
                     '''.replace("{{prob_html}}", prob_html), unsafe_allow_html=True)
+
+                if impact_calc_on and impact_ticker:
+                    with st.spinner(f"Quantifying impact for {impact_ticker}..."):
+                        impact_df = fetch_stock_data(impact_ticker, "1mo")
+                        if impact_df is not None and not impact_df.empty:
+                            from utils import quantify_sentiment_impact
+                            curr_p = impact_df['Close'].iloc[-1]
+                            vol = impact_df['Close'].pct_change().std()
+                            impact_res = quantify_sentiment_impact(s_label, sentiment['confidence'], curr_p, vol)
+                            
+                            delta_color = "#00ff9d" if impact_res['price_delta'] >= 0 else "#ff4b4b"
+                            
+                            st.markdown(f'''
+                                <div class="premium-card" style="border-top: 2px solid {delta_color};">
+                                    <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Calculated News Impact (Next 24h)</p>
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px;">
+                                        <div>
+                                            <p style="font-size: 0.85rem; color: rgba(255,255,255,0.5); margin:0;">Expected Move</p>
+                                            <h3 style="color: {delta_color}; font-size: 1.8rem; margin:0;">{impact_res['expected_change_pct'] * 100:+.2f}%</h3>
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <p style="font-size: 0.85rem; color: rgba(255,255,255,0.5); margin:0;">Price Delta</p>
+                                            <h3 style="color: white; font-size: 1.8rem; margin:0;">₹{impact_res['price_delta']:+.2f}</h3>
+                                        </div>
+                                    </div>
+                                    <hr style="border-color: rgba(255,255,255,0.05); margin: 15px 0;">
+                                    <p style="font-size: 0.9rem; color: rgba(255,255,255,0.7);">
+                                        <b>Scientific Logic:</b> Based on 20-day volatility (σ = {vol:.2%}) and NLP confidence, 
+                                        the mathematical ceiling for the predicted move is <b>₹{impact_res['predicted_price']:.2f}</b>.
+                                    </p>
+                                </div>
+                            ''', unsafe_allow_html=True)
+                        else:
+                            st.warning(f"Could not calculate impact for {impact_ticker}. Verify ticker.")
         else:
             st.info("Please enter intel text to analyze.")
 

@@ -99,3 +99,29 @@ def generate_technical_reasoning(df):
         reasons.append({"label": "Negative Momentum", "desc": "MACD is below the Signal line.", "type": "bearish"})
 
     return reasons
+
+def quantify_sentiment_impact(sentiment_score_label, confidence, current_price, volatility_20d):
+    """
+    Calculates the theoretical price impact using a volatility-adjusted formula.
+    Formula: ΔP = Price * (Score * Volatility * Confidence * K)
+    """
+    # Map score label to -1, 0, 1
+    s_label = sentiment_score_label.upper()
+    if "BULLISH" in s_label or "POSITIVE" in s_label:
+        score_multiplier = 1.0
+    elif "BEARISH" in s_label or "NEGATIVE" in s_label:
+        score_multiplier = -1.0
+    else:
+        score_multiplier = 0
+    
+    # Calculate expected change (using 1.64 for 90% confidence interval multiplier)
+    expected_change_pct = score_multiplier * volatility_20d * confidence * 1.64
+    
+    price_delta = current_price * expected_change_pct
+    predicted_price = current_price + price_delta
+    
+    return {
+        "expected_change_pct": expected_change_pct,
+        "price_delta": price_delta,
+        "predicted_price": predicted_price
+    }
