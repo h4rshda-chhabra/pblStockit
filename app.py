@@ -740,7 +740,7 @@ elif page == "Analyzer":
             consensus = get_consensus_verdict(latest_rsi, latest_macd, sentiment['label'])
             
             warning_html = ""
-            if (consensus['tech_signal'] == "Bullish" and res_data['label'] == "NO BUY"):
+            if (consensus['tech_signal'] == "Bullish" and res_data['label'] == "SHOULD NOT BUY"):
                 warning_html = '''<div class="tech-pill" style="border-left: 4px solid #eedd88; background: rgba(238, 221, 136, 0.05);">
                 <span style="font-size: 1.4rem;">( ! )</span>
                 <div>

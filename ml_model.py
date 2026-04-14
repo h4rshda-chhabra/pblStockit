@@ -112,7 +112,7 @@ def ml_predict(model, stock_data):
         confidence = probs[1]
     else:
         pred_idx = 0
-        label = "NO BUY"
+        label = "SHOULD NOT BUY"
         confidence = probs[0]
     
     # Get Global Feature Importance
