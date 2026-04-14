@@ -875,20 +875,28 @@ elif page == "Sentiment":
                     
                     st.write("<br>", unsafe_allow_html=True)
                     st.markdown(f'''
-                        <div class="premium-card" style="position: relative; overflow: hidden;">
-                            <div style="position: absolute; top: -10px; right: -10px; font-size: 8rem; font-weight: 900; color: rgba(255,255,255,0.02); pointer-events: none; text-transform: uppercase;">{s_label}</div>
-                            <p style="color: rgba(255,255,255,0.4); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px;">Analytical Perception Verdict</p>
-                            <div style="display: flex; align-items: baseline; gap: 20px; margin: 30px 0;">
-                                <h2 style="color: {s_color}; font-size: 4.5rem; margin: 0; font-weight: 900; line-height: 1;">{s_label.upper()}</h2>
-                                <p style="font-size: 1.6rem; color: rgba(255,255,255,0.6); font-family: 'JetBrains Mono';">Score: {s_score:+.2f}</p>
+                        <div class="premium-card" style="position: relative; overflow: hidden; padding: 50px;">
+                            <div style="position: absolute; top: -10px; right: -10px; font-size: 10rem; font-weight: 900; color: rgba(255,255,255,0.02); pointer-events: none; text-transform: uppercase;">{s_label}</div>
+                            <p style="color: rgba(255,255,255,0.4); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 40px;">Institutional Signal Verdict</p>
+                            
+                            <h2 style="color: {s_color}; font-size: 6rem; margin: 0; font-weight: 950; line-height: 1; letter-spacing: -2px;">{s_label.upper()}</h2>
+                            
+                            <div style="display: flex; align-items: center; gap: 30px; margin-top: 40px;">
+                                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 15px 25px; border-radius: 12px;">
+                                    <p style="color: rgba(255,255,255,0.4); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; margin-bottom: 5px;">Model Score</p>
+                                    <span style="font-size: 2rem; color: white; font-weight: 800; font-family: 'JetBrains Mono';">{s_score:+.2f}</span>
+                                </div>
+                                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 15px 25px; border-radius: 12px;">
+                                    <p style="color: rgba(255,255,255,0.4); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; margin-bottom: 5px;">Neural Confidence</p>
+                                    <span style="font-size: 2rem; color: white; font-weight: 800; font-family: 'JetBrains Mono';">{sentiment['confidence']:.1%}</span>
+                                </div>
                             </div>
-                            <div style="margin-top: 25px;">
-                                {"".join([f'<div style="display:inline-block; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.1); padding:6px 16px; border-radius:8px; margin-right:10px; margin-bottom:10px; font-size:0.75rem; font-weight:700; color:#00D9FF; text-transform:uppercase; letter-spacing:1px;">{k}</div>' for k in keywords]) if keywords else '<span style="color: grey; font-size: 0.8rem;">No critical linguistic signals identified.</span>'}
-                            </div>
-                            <hr style="border-color: rgba(255,255,255,0.05); margin: 35px 0;">
-                            <div style="display: flex; justify-content: space-between; align-items: center;">
-                                <p style="color: rgba(255,255,255,0.4); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Neural Inference Confidence</p>
-                                <span style="color: white; font-weight: 800; font-size: 1.2rem;">{conf_level.upper()} ({sentiment['confidence']:.1%})</span>
+
+                            <hr style="border-color: rgba(255,255,255,0.05); margin: 50px 0;">
+                            
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <div style="width: 10px; height: 10px; background: {s_color}; border-radius: 50%; box-shadow: 0 0 10px {s_color};"></div>
+                                <p style="color: rgba(255,255,255,0.4); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Inference Status: Active - {conf_level.upper()} CONVICTION</p>
                             </div>
                         </div>
                     ''', unsafe_allow_html=True)
