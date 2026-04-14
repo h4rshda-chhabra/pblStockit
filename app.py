@@ -857,12 +857,17 @@ elif page == "Sentiment":
     sec_analysis, sec_quant = st.tabs(["Perception Hub", "Prediction Forecaster"])
     
     with sec_analysis:
-        st.markdown('<div class="premium-card" style="border: 1px solid rgba(0, 212, 255, 0.2);"><p style="color: #00d4ff; font-weight: 700; margin-bottom: 15px;">AI Neural Perception Input</p>', unsafe_allow_html=True)
-        intel_input = st.text_area("Intel Source", height=150, placeholder="Paste financial news headline or earnings update...", label_visibility="collapsed", key="perc_input")
+        st.markdown('<div class="premium-card" style="border: 1px solid rgba(0, 212, 255, 0.2); margin: 0 auto 20px auto; max-width: 1000px;"><p style="color: #00d4ff; font-weight: 700; margin-bottom: 10px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">AI Neural Perception Input</p>', unsafe_allow_html=True)
+        intel_input = st.text_area("Intel Source", height=100, placeholder="Paste financial news headline or earnings update...", label_visibility="collapsed", key="perc_input")
         st.markdown('</div>', unsafe_allow_html=True)
         
         btn_col, _ = st.columns([1, 2])
-        if btn_col.button("RUN AI PERCEPTION", type="primary", use_container_width=True):
+        with btn_col:
+            st.markdown('<div style="text-align: center; margin: 0 auto; width: 100%;">', unsafe_allow_html=True)
+            run_p = st.button("RUN AI PERCEPTION", type="primary", use_container_width=True)
+            st.markdown('</div>', unsafe_allow_html=True)
+
+        if run_p:
             if intel_input.strip():
                 headlines = [h.strip() for h in intel_input.split("\n") if h.strip()]
                 with st.spinner("Analyzing linguistic manifold..."):
@@ -871,32 +876,30 @@ elif page == "Sentiment":
                     s_score = (sentiment['probabilities'].get('Bullish', 0) - sentiment['probabilities'].get('Bearish', 0))
                     s_color = "#00ff9d" if s_score > 0.1 else "#ff4b4b" if s_score < -0.1 else "#eedd88"
                     conf_level = "High" if sentiment['confidence'] > 0.85 else "Medium" if sentiment['confidence'] > 0.65 else "Low"
-                    keywords = [w for w in ["growth", "revenue", "deal", "profit", "bullish", "momentum", "surge", "gain", "loss", "warning", "cut", "drop"] if w in intel_input.lower()]
                     
-                    st.write("<br>", unsafe_allow_html=True)
                     st.markdown(f'''
-                        <div class="premium-card" style="position: relative; overflow: hidden; padding: 50px;">
-                            <div style="position: absolute; top: -10px; right: -10px; font-size: 10rem; font-weight: 900; color: rgba(255,255,255,0.02); pointer-events: none; text-transform: uppercase;">{s_label}</div>
-                            <p style="color: rgba(255,255,255,0.4); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 3px; margin-bottom: 40px;">Institutional Signal Verdict</p>
+                        <div class="premium-card" style="position: relative; overflow: hidden; padding: 40px; margin: 20px auto; max-width: 1000px;">
+                            <div style="position: absolute; top: -10px; right: -10px; font-size: 8rem; font-weight: 900; color: rgba(255,255,255,0.02); pointer-events: none; text-transform: uppercase;">{s_label}</div>
+                            <p style="color: rgba(255,255,255,0.4); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px;">Institutional Signal Verdict</p>
                             
-                            <h2 style="color: {s_color}; font-size: 6rem; margin: 0; font-weight: 950; line-height: 1; letter-spacing: -2px;">{s_label.upper()}</h2>
+                            <h2 style="color: {s_color}; font-size: 5rem; margin: 0; font-weight: 900; line-height: 1; letter-spacing: -2px;">{s_label.upper()}</h2>
                             
-                            <div style="display: flex; align-items: center; gap: 30px; margin-top: 40px;">
-                                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 15px 25px; border-radius: 12px;">
-                                    <p style="color: rgba(255,255,255,0.4); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; margin-bottom: 5px;">Model Score</p>
-                                    <span style="font-size: 2rem; color: white; font-weight: 800; font-family: 'JetBrains Mono';">{s_score:+.2f}</span>
+                            <div style="display: flex; align-items: center; gap: 20px; margin-top: 30px;">
+                                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 12px 20px; border-radius: 12px;">
+                                    <p style="color: rgba(255,255,255,0.4); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; margin-bottom: 5px;">Model Score</p>
+                                    <span style="font-size: 1.6rem; color: white; font-weight: 800; font-family: 'JetBrains Mono';">{s_score:+.2f}</span>
                                 </div>
-                                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 15px 25px; border-radius: 12px;">
-                                    <p style="color: rgba(255,255,255,0.4); font-size: 0.7rem; font-weight: 700; text-transform: uppercase; margin-bottom: 5px;">Neural Confidence</p>
-                                    <span style="font-size: 2rem; color: white; font-weight: 800; font-family: 'JetBrains Mono';">{sentiment['confidence']:.1%}</span>
+                                <div style="background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.1); padding: 12px 20px; border-radius: 12px;">
+                                    <p style="color: rgba(255,255,255,0.4); font-size: 0.65rem; font-weight: 700; text-transform: uppercase; margin-bottom: 5px;">Neural Confidence</p>
+                                    <span style="font-size: 1.6rem; color: white; font-weight: 800; font-family: 'JetBrains Mono';">{sentiment['confidence']:.1%}</span>
                                 </div>
                             </div>
 
-                            <hr style="border-color: rgba(255,255,255,0.05); margin: 50px 0;">
+                            <hr style="border-color: rgba(255,255,255,0.05); margin: 30px 0;">
                             
                             <div style="display: flex; align-items: center; gap: 10px;">
-                                <div style="width: 10px; height: 10px; background: {s_color}; border-radius: 50%; box-shadow: 0 0 10px {s_color};"></div>
-                                <p style="color: rgba(255,255,255,0.4); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Inference Status: Active - {conf_level.upper()} CONVICTION</p>
+                                <div style="width: 8px; height: 8px; background: {s_color}; border-radius: 50%; box-shadow: 0 0 10px {s_color};"></div>
+                                <p style="color: rgba(255,255,255,0.4); font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Status: {conf_level.upper()} CONVICTION</p>
                             </div>
                         </div>
                     ''', unsafe_allow_html=True)
