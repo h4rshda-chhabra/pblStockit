@@ -42,5 +42,8 @@ Start the analytical dashboard using the following command:
 streamlit run app.py
 ```
 
+Live Link: https://pblstockit-sgmbrahz3emuheve2fjyfr.streamlit.app/
+
+
 ## Disclaimer
 This software is for educational and analytical purposes only. It does not constitute financial advice. Trading stocks involves significant risk, and users should perform their own due diligence or consult with a licensed professional before making investment decisions.
