@@ -913,23 +913,23 @@ elif page == "Sentiment":
                         theme_color = "#00ff9d" if is_bull else "#ff6b6b"
                         low_color = "#00ff9d22" if is_bull else "#ff6b6b22"
                         glow_shadow = f"0 0 60px {theme_color}33"
-                        direction_arrow = "↑" if is_bull else "↓"
+                        direction_text = "UP" if is_bull else "DOWN"
                         vol_level = "High" if vol > 0.03 else "Moderate" if vol > 0.015 else "Low"
                         conf_level = "High" if news_data['confidence'] > 0.8 else "Moderate" if news_data['confidence'] > 0.6 else "Low"
                         
-                        header_insight = f"AI predicts short-term {'upside' if is_bull else 'downside'} momentum."
+                        header_insight = f"AI Predicts Short-Term {'Upside' if is_bull else 'Downside'} Momentum"
                         
-                        st.markdown(f'<p style="color: white; font-size: 1.4rem; font-weight: 700; margin-bottom: 30px; border-left: 4px solid {theme_color}; padding-left: 15px;">{header_insight}</p>', unsafe_allow_html=True)
+                        st.markdown(f'<p style="color: white; font-size: 1.4rem; font-weight: 700; margin-bottom: 30px; border-left: 4px solid {theme_color}; padding-left: 15px; text-transform: uppercase; letter-spacing: 1px;">{header_insight}</p>', unsafe_allow_html=True)
                         
                         iq_c1, iq_c2 = st.columns([1, 1], gap="large")
                         with iq_c1:
                             st.markdown(f'''
                                 <div class="premium-card" style="box-shadow: {glow_shadow}; border: 1px solid {theme_color}44; text-align: center; border-radius: 24px; hover-elevation: 10px;">
-                                    <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">AI Signal</p>
-                                    <h1 class="hero-number" style="color: {theme_color}; font-size: 4.8rem; margin: 15px 0; font-weight: 900;">{direction_arrow} {abs(impact['expected_change_pct']*100):.2f}%</h1>
-                                    <p style="font-size: 1.6rem; color: white; opacity: 0.9; margin-top: -10px;">₹ {impact['price_delta']:+.2f}</p>
+                                    <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">AI Signal Status</p>
+                                    <h1 class="hero-number" style="color: {theme_color}; font-size: 4.8rem; margin: 15px 0; font-weight: 900;">{direction_text} {abs(impact['expected_change_pct']*100):.2f}%</h1>
+                                    <p style="font-size: 1.6rem; color: white; opacity: 0.9; margin-top: -10px;">INR {impact['price_delta']:+.2f}</p>
                                     <div style="margin-top: 25px; background: {low_color}; padding: 8px 20px; border-radius: 50px; display: inline-block;">
-                                        <span style="color: {theme_color}; font-weight: 800; font-size: 0.85rem;">{conf_level.upper()} CONFIDENCE ({news_data['confidence']:.0%})</span>
+                                        <span style="color: {theme_color}; font-weight: 800; font-size: 0.85rem;">{conf_level.upper()} CONVICTION ({news_data['confidence']:.0%})</span>
                                     </div>
                                 </div>
                             ''', unsafe_allow_html=True)
@@ -939,27 +939,39 @@ elif page == "Sentiment":
                                     <p style="color: rgba(255,255,255,0.5); font-size: 0.8rem; font-weight: 700; text-transform: uppercase;">Reasoning Matrix</p>
                                     <div style="margin-top: 25px;">
                                         <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px;">
-                                            <span style="color: rgba(255,255,255,0.6);">📉 Sentiment</span>
+                                            <span style="color: rgba(255,255,255,0.6); font-weight: 600;">Sentiment Analysis</span>
                                             <span style="color: white; font-weight: 700;">{news_data['label']}</span>
                                         </div>
                                         <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.05); margin: 0;">
                                         <div style="display: flex; align-items: center; justify-content: space-between; margin: 20px 0;">
-                                            <span style="color: rgba(255,255,255,0.6);">⚡ Volatility</span>
+                                            <span style="color: rgba(255,255,255,0.6); font-weight: 600;">Market Volatility</span>
                                             <span style="color: white; font-weight: 700;">{vol_level}</span>
                                         </div>
                                         <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.05); margin: 0;">
                                         <div style="display: flex; align-items: center; justify-content: space-between; margin-top: 20px;">
-                                            <span style="color: rgba(255,255,255,0.6);">🧠 Confidence</span>
+                                            <span style="color: rgba(255,255,255,0.6); font-weight: 600;">Model Confidence</span>
                                             <span style="color: white; font-weight: 700;">{conf_level}</span>
                                         </div>
                                     </div>
                                     <div style="margin-top: 35px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px;">
                                         <p style="font-style: italic; color: {theme_color}; font-size: 1.1rem; line-height: 1.4; font-weight: 500;">
-                                            Result: The high {news_data['label'].lower()} factor paired with {vol_level.lower()} volatility suggests a definitive short-term move.
+                                            Result: The {news_data['label'].lower()} factor combined with {vol_level.lower()} volatility suggests a definitive short-term movement.
                                         </p>
                                     </div>
                                 </div>
                             ''', unsafe_allow_html=True)
+                        
+                        # Score Explanation
+                        st.markdown(f'''
+                            <div class="premium-card" style="background: rgba(255,255,255,0.02); border-color: rgba(255,255,255,0.05);">
+                                <p style="color: rgba(255,255,255,0.5); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; margin-bottom: 10px;">Sentiment Metric Definition</p>
+                                <p style="color: rgba(255,255,255,0.7); font-size: 0.9rem; line-height: 1.6;">
+                                    The <b>Sentiment Score</b> ranges from <b>-1.0 (Extreme Bearish)</b> to <b>+1.0 (Extreme Bullish)</b>. 
+                                    A score near 0.0 indicates a neutral market posture. This value represents the net probability weight 
+                                    calculated by the transformer-based FinBERT model after analyzing the linguistic patterns of your input text.
+                                </p>
+                            </div>
+                        ''', unsafe_allow_html=True)
                     else: st.error("Market data fetch failed.")
             else: st.warning("Enter both Symbol and Event specification.")
 
@@ -1064,12 +1076,12 @@ elif page == "Education":
 
     st.markdown("---")
     st.markdown("""
-    ### **🎓 Academic and Professional References**
+    ### **Section IV: Academic and Professional References**
     The educational data on this platform is curated from university-level financial curriculum and institutional research papers:
     
-    1.  **Graham, B. (1949).** *The Intelligent Investor.* Harper & Row Publishing.
-    2.  **Malkiel, B. (1973).** *A Random Walk Down Wall Street.* W. W. Norton & Company.
-    3.  **Kahneman, D., & Tversky, A. (1979).** *Prospect Theory: An Analysis of Decision under Risk.* Econometrica.
+    1.  **Graham, B. (1949).** *The Intelligent Investor.* Harper and Row Publishing.
+    2.  **Malkiel, B. (1973).** *A Random Walk Down Wall Street.* W. W. Norton and Company.
+    3.  **Kahneman, D., and Tversky, A. (1979).** *Prospect Theory: An Analysis of Decision under Risk.* Econometrica.
     4.  **CFA Institute.** *Equity Valuation and Market Microstructure Level II Curriculum.*
     5.  **Shiller, R. J. (2000).** *Irrational Exuberance.* Princeton University Press.
     6.  **Dalio, R. (2018).** *Principles for Navigating Big Debt Crises.* Bridgewater Associates Research.
