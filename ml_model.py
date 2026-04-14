@@ -48,7 +48,6 @@ def create_labeled_dataset(stock_id):
     return features, target
 
 def train_model(stock_id):
-    print(f"[ML] Training model for {stock_id}...")
     X, y = create_labeled_dataset(stock_id)
     
     if len(X) < 10:
@@ -73,7 +72,6 @@ def train_model(stock_id):
     model_path = os.path.join(MODEL_DIR, f"{stock_id}_model.pkl")
     # Save model and metrics together
     joblib.dump({"model": model, "metrics": metrics}, model_path)
-    print(f"[ML] Model and metrics saved to {model_path}")
     return model, metrics
 
 import streamlit as st

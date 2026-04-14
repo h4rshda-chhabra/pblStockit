@@ -7,45 +7,35 @@ import joblib
 import plotly.graph_objects as go
 import plotly.express as px
 from plotly.subplots import make_subplots
+import streamlit.components.v1 as components
 
-# Service Imports
 from fetch import fetch_stock_data
 from indicators import calculate_indicators
-from ml_model import train_model, ml_predict, load_or_train_model, MODEL_DIR
+from ml_model import ml_predict, load_or_train_model
 from utils import normalize_period, get_consensus_verdict, generate_technical_reasoning
 from news import get_financial_news
 from sentiment import analyze_sentiment
-from ui_utils import apply_custom_style, header_section, footer_section, render_navbar, render_ticker
+from ui_utils import apply_custom_style, header_section, footer_section, render_navbar
 
-# --- Page Configuration ---
 st.set_page_config(
     page_title="StockIt AI - Institutional Analytics",
-    page_icon=None,
     layout="wide",
     initial_sidebar_state="collapsed"
 )
 
-# Apply premium Styles
 apply_custom_style()
 
-# Ensure PixelBlast background is removed if not on Home Page
-import streamlit.components.v1 as components
+# Background cleanup
 components.html("""
     <script>
         const canvas = window.parent.document.getElementById('pixelblast-bg');
-        if (canvas) {
-            canvas.remove();
-        }
+        if (canvas) { canvas.remove(); }
     </script>
 """, height=0, width=0)
 
-# Render Header (Ticker + Navbar) and get current page
 page = render_navbar()
 
-# --- Page: Home ---
 if page == "Home":
-    import streamlit.components.v1 as components
-    
     particles_html = """
     <!DOCTYPE html>
     <html>
@@ -55,9 +45,10 @@ if page == "Home":
             canvas { display: block; width: 100vw; height: 100vh; }
         </style>
     </head>
-    <body>
+    <body onload="init()">
         <canvas id="cosmos"></canvas>
         <script>
+
             try {
                 const frame = window.frameElement;
                 if (frame) {
