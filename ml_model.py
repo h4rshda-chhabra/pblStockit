@@ -11,7 +11,7 @@ import os
 
 # Fixed feature set
 FEATURES = ['SMA_50', 'SMA_200', 'EMA_50', 'EMA_200', 'RSI', 'MACD', 'Signal_Line']
-MODEL_DIR = os.path.join(os.path.dirname(__file__), "models")
+MODEL_DIR = os.path.join(os.path.dirname(__file__), "models_v2")
 
 def create_labeled_dataset(stock_id):
     # Use central fetch logic with 5y data for training
